@@ -1,7 +1,6 @@
 // text editor model
 // Keeps track of cursors and pages in document
 // Written by: David Zhang
-//
 
 // TODO: 
 //	Use charcodes (ascii) to get char distance
@@ -14,7 +13,8 @@ var PAGE_SIZE = {width: 8.5*PPI, height: 11*PPI};			// size for one page, standa
 
 /************** GLOBAL VARIABLES *******************/
 // initialize the curser at default position, also keeps track of current page, box..etc
-var cursor = {section: null, index: 0, x: 0, y: 0, style: new Style("rgb(0,0,0)", "Arial", "Normal", "11", "none", "even")};
+// index: the index of the cursor in the text, (x,y): location of the cursor on the current page, style: style at the current cursor
+var cursor = {index: 0, x: 0, y: 0, style: new Style("rgb(0,0,0)", "Arial", "Normal", "11", "none", "even")};
 		
 /************** OBJECT DECLARATION *******************/
 var Model = function()
@@ -29,7 +29,8 @@ var Model = function()
 	this.background = "rgba(255, 255, 255, 0)";
 
 	// create a new canvas element per page
-	this.canvas = document.getElementById("TheOne");
+	this.canvas = document.createElement('canvas');
+	document.body.appendChild(this.canvas);
 	this.canvas.height = this.height;
 	this.canvas.width = this.width;
 	this.canvas.border = "0 px";
@@ -57,10 +58,9 @@ var Model = function()
 	/*** SETUP CONTROLLER ***/
 	// variable deciarations
 	this.controller = new Controller(this);								// user input controller
-	this.windows = [];													// array to store all currently viewable window
-	this.sections = [];													// array to store all sections in document
+	this.section = new Section(this);									// section object stores all chars in the document
+	this.pages = [];													// array to store all currently viewable window
 	this.currentPage = 0;												// currently viewed page, the page to draw
-	this.currentWindow = 0;												// currently selected window	
 	
 	// make the default full page box
 	var box = new TextBox(PPI, PPI,	// offset box by 1 inch from page by default;		
@@ -98,7 +98,7 @@ Model.prototype.focus = function()
 Model.prototype.insertPage = function(index)
 {
 	var page = new Page(PAGE_SIZE);
-	this.windows.splice(index, 0, page);
+	this.pages.splice(index, 0, page);
 	this.redraw = true;
 };
 
@@ -106,11 +106,11 @@ Model.prototype.insertPage = function(index)
 Model.prototype.changePage = function(index)
 {
 	// hide current page
-	this.windows[this.currentPage].visible = false;
+	this.pages[this.currentPage].visible = false;
 	// make new page
 	this.currentPage = index;
 	// make current page in middle of screen, draw left page and right page
-	var page = this.windows[this.currentPage];
+	var page = this.pages[this.currentPage];
 	page.x = this.width/2 - page.width/2;
 	page.visible = true;
 
@@ -125,7 +125,7 @@ Model.prototype.draw = function()
 
 		this.clear();
 		// redraw the current window
-		this.windows[this.currentWindow].draw(this.context);
+		this.pages[this.currentPage].draw(this.context);
 
 		this.context.restore();
 
@@ -141,20 +141,20 @@ Model.prototype.newSection = function(box)
 	cursor.section = section;
 	cursor.index = 0;
 	this.sections.push(section);
-	this.windows[this.currentPage].addBox(box);
+	this.pages[this.currentPage].addBox(box);
 };
 
 // add a box to continue the current section
 Model.prototype.insertBox = function(index)
 {
 	var box = cursor.section.cloneBox(index);
-	this.windows[this.currentPage].addBox(box);
+	this.pages[this.currentPage].addBox(box);
 };
 
 // add a new image to the current page
 Model.prototype.insertImage = function(image)
 {
-	this.windows[this.currentPage].addImage(image);
+	this.pages[this.currentPage].addImage(image);
 };
 
 // rescale the page to fit on one window
@@ -203,8 +203,8 @@ Model.prototype.backspace = function()
 Model.prototype.updateClick = function(x, y)
 {
 	this.focus();
-	if(this.windows[this.currentWindow].isHovering(x, y)) {
-		this.windows[this.currentWindow].updateClick(x, y);
+	if(this.pages[this.currentPage].isHovering(x, y)) {
+		this.pages[this.currentPage].updateClick(x, y);
 	} else {
 		// if nothing else is clicked, toggle menu visibility
 		this.menuVisible = !this.menuVisible;
@@ -217,13 +217,13 @@ Model.prototype.updateClick = function(x, y)
 // Used to drag highlighted text, or highlighted picture
 Model.prototype.updateDrag = function(x, y)
 {
-	this.windows[this.currentWindow].updateDrag(x, y);
+	this.pages[this.currentPage].updateDrag(x, y);
 	this.redraw = true;
 };
 
 Model.prototype.stopDrag = function()
 {
-	this.windows[this.currentWindow].stopDrag();
+	this.pages[this.currentPage].stopDrag();
 	this.redraw = true;
 };
 

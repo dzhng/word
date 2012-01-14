@@ -13,9 +13,11 @@
 /************** GLOBAL VARIABLES *******************/
 
 /************** OBJECT DECLARATION *******************/
-var Section = function(box)
+var Section = function(model)
 {
 	this.chars = [];
+
+	this.model = model;
 
 	// make a new box and add to box array
 	box.section = this;
@@ -82,6 +84,12 @@ Section.prototype.format = function(index)
 		if(this.chars[i].letter == ' ') {
 			while(box.insertWord(word, width, height)==false) {
 				// TODO: need to finish this
+				// if there are still boxes in the box array in this section
+				if(++curbox < this.boxes.length) {
+					box = this.boxes[curbox];
+					box.reset();
+				} else {	// that was the last box, create a new box and add to page
+				}
 			}
 			word = [];
 			width = 0;

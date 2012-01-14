@@ -1,0 +1,1 @@
+// stores all template pages
