@@ -13,9 +13,11 @@
 /************** GLOBAL VARIABLES *******************/
 
 /************** OBJECT DECLARATION *******************/
-var Section = function(box)
+var Section = function(model)
 {
 	this.chars = [];
+
+	this.model = model;
 
 	// make a new box and add to box array
 	box.section = this;
