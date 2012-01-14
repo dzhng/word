@@ -7,19 +7,6 @@
 //	Catagorize width of special characters, e.g. space, ;, ` # @.. etc
 //  Use jQuery to manage windows
 
-/************** GOLBAL CONSTNATS *******************/ 
-var PPI = 72;												// pixel per inch to calibrate everything to
-var PAGE_SIZE = {width: 8.5*PPI, height: 11*PPI};			// size for one page, standard paper size, in inches
-
-/************** GLOBAL VARIABLES *******************/
-// global persistant settings
-// template: template page variable
-var settings = {template: TwoColumns};
-
-// initialize the curser at default position, also keeps track of current page, box..etc
-// index: the index of the cursor in the text, (x,y): location of the cursor on the current page, style: style at the current cursor
-var cursor = {index: 0, x: 0, y: 0, style: new Style("rgb(0,0,0)", "Arial", "Normal", "11", "none", "even")};
-		
 /************** OBJECT DECLARATION *******************/
 var Model = function()
 {
@@ -168,8 +155,10 @@ Model.prototype.insertChar = function(key)
 {
 	if(key != null) {
 		this.section.insertChar(key, cursor.index);
+		// keep inserting new pages until the char can be inserted
 		while(this.section.format(cursor.index-1) == false) {
 			this.insertPage(this.pages.length);
+			this.changePage(this.pages.length-1);
 		}
 		this.redraw = true;
 	}
