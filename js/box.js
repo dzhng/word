@@ -27,10 +27,13 @@ var TextBox = function(x, y, Width, Height, Page)
 	this.stopDistance = PPI;	// distance from bottom of the page to stop expanding (margin)
 
 	// the page this box belongs to
-	this.page = Page || undefined;
+	this.page = Page;
 
 	// buffer to stores all the lines of text in the box
 	this.lines = [];
+	
+	// start with one line
+	this.reset();
 };
 
 // Inherit prototypes from Window object
@@ -38,16 +41,17 @@ TextBox.prototype = new cObject;
 
 /************** BUILTIN FUNCTIONS *******************/
 // add the line to the box, returns the height of space left
-TextBox.prototype.insertLine = function(line)
+TextBox.prototype.newLine = function()
 {
-	// check for height overflow
-	if(this.curHeight + line.height > this.height) {
+	// check for height overflow in the box first
+	if(this.curHeight > this.height) {
 		return false;
 	}
 
+	var line = new TextLine();
 	line.setPoint(0, this.curHeight);
 	this.lines.push(line);
-	this.curHeight += line.height;
+	console.log("new line added, total lines: %d", this.lines.length);
 	return true;
 };
 
@@ -55,6 +59,7 @@ TextBox.prototype.reset = function()
 {
 	this.lines = [];	// empty current line array
 	this.curHeight = 0;	// reset current line height
+	this.newLine();
 };
 
 // add word to current textbox, return true on success, false on fail
@@ -63,19 +68,15 @@ TextBox.prototype.reset = function()
 TextBox.prototype.insertWord = function(word, width, height)
 {
 	var curLine = this.lines.length - 1;
-	if(curLine < 0) {
-		this.insertLine(new TextLine());
-		curLine = 0
-	}
 
 	// see if there are any obsticles in the way, if so, make a new line
-	if(this.page.checkObsticle(this.x, this.y, 
+	/*if(this.page.checkObsticle(this.x, this.y, 
 				this.lines[curLine].width + width, 
 				Math.max(this.lines[curLine].height, height)) === false) {
 		this.lines[curLine].align();
 		this.curHeight += this.lines[curLine].height;
-		this.insertLine(new TextLine());
-	}
+		this.newLine();
+	}*/
 
 	// if can't add to this line, make a new line
 	if(this.lines[curLine].width + width < this.width) {
@@ -83,11 +84,14 @@ TextBox.prototype.insertWord = function(word, width, height)
 	} else {
 		this.lines[curLine].align();
 		this.curHeight += this.lines[curLine].height;
-		this.insertLine(new TextLine());
+		if(this.newLine() === false) {
+			// this box can't fit any more lines, return the overflow
+			return this.lines.pop().chars;
+		}
 		this.lines[curLine+1].insertWord(word, width, height);
 	}
 
-	return true;
+	return [];
 };
 
 TextBox.prototype.getLocationFromPoint = function(x, y)

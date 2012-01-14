@@ -81,12 +81,12 @@ Model.prototype.focus = function()
 /************** BUILTIN FUNCTIONS *******************/
 Model.prototype.insertPage = function(index)
 {
-	console.log("page inserted, total of %d pages", this.pages.length);
-
 	// create a new page that's the same as the template page
 	var page = new settings.template();
 	this.pages.splice(index, 0, page);
 	this.redraw = true;
+
+	console.log("page inserted, total of %d pages", this.pages.length);
 };
 
 // make the input page the new center page
