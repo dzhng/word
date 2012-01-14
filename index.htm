@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        
+        <title>HTML5 Canvas Editor Research</title>
+        
+        <style type="text/css">
+			body    { background: url("images/desktop.png"); margin: 0; }
+            #editor { background: #fff; border: 1px solid #444; }
+		</style>
+        
+        <script type="text/javascript" src="js/browser.js"></script>
+        <script type="text/javascript" src="js/size.js"></script>
+        <script type="text/javascript" src="js/object.js"></script>
+        <script type="text/javascript" src="js/point.js"></script>
+        <script type="text/javascript" src="js/style.js"></script>
+        <script type="text/javascript" src="js/box.js"></script>
+        <script type="text/javascript" src="js/image.js"></script>
+        <script type="text/javascript" src="js/page.js"></script>
+        <script type="text/javascript" src="js/controller.js"></script>
+        <script type="text/javascript" src="js/section.js"></script>
+        <script type="text/javascript" src="js/bing.js"></script>
+        <script type="text/javascript" src="js/search.js"></script>
+        <script type="text/javascript" src="js/char.js"></script>
+        <script type="text/javascript" src="js/line.js"></script>
+        <script type="text/javascript" src="js/function.js"></script>
+        <script type="text/javascript" src="js/model.js"></script>
+        <script type="text/javascript">
+            function document_load() {	// Setup editor
+                var editor = new Model();
+
+				editor.setText(
+						"It is important to me that the Pennstate graduate school embraces research, learning, and leadership. It is for this reason that I am keenly interested in matriculating in PennState as a graduate student.    Because of the emphasis it places on research, I see this as the next appropriate milestone in my goal of becoming a researcher.  Since my freshman year, I have been actively involved in multiple extracurricular research projects, starting with the Student Space Programs Laboratory.   As my involvement in research projects grew, I became aware of my potential as a researcher. This awareness has convinced me to pursue graduate studies in the next step of my academic career. The specific aspect of research that interests me the most is the fact that research is not circumscribed by convention, for I am not a creature of routine.  I am very passionate about seeking new ideas and attempting to achieve what has never been done before--so much so that project milestones occasionally take precedent over academic concerns (which is unfortunately reflected by large dips in my GPA).  I have, in fact, become so accustomed to spending my nights at laboratories in Electrical Engineering East that I always carry an extra set of tooth brush and tooth paste with me so I can head directly to class the following morning.  The thrill of discovery makes it all worthwhile to me."
+				);
+
+				editor.setText(
+						"I loved talking to the skankiest prostitutes at three in the morning with a camera crew around me, fires burning in the street, sad, abused people clinging to scraps of life for their pleasures, bailed out prisoners and the drug dealers waiting for them to be released, homeless addicts with nowhere to go and they only weren’t freaks if you saw them at three in the morning. In short,  I loved my job. Entrepreneurship ruined it. I’m not like how Mark Zuckerberg describes himself: 'a builder'. My guess is, I’m not like most of the smart people who read this blog who go out there and build things to improve the lives of others. And yet, I kept doing it to myself over and over again. Once you enter the world of 'eat what you kill' you can’t go back to being spoon-fed by the pencil factory anymore. Sadly. I write about my first job here (and the prostitutes). I had a regular job at HBO. My title: Junior Programmer Analyst in the IT department. I told HBO, 'you do original TV programming so why not do original web programming.' And magically, from 1996-98, they let me do whatever I wanted to do at three in the morning and then put it on their website.  My original job was to do some Unix/ Oracle thing that I was totally unqualified for and didn’t know how to do. So I figured out a more fun idea for myself and persuaded them to let me do it."
+				);
+
+				editor.setText(
+						"Image classification and annotation are important prob- lems in computer vision, but rarely considered together. In- tuitively, annotations provide evidence for the class label, and the class label provides evidence for annotations. For example, an image of class highway is more likely anno- tated with words “road,” “car,” and “traffic” than words “fish,” “boat,” and “scuba.” In this paper, we develop a new probabilistic model for jointly modeling the image, its class label, and its annotations. Our model treats the class label as a global description of the image, and treats an- notation terms as local descriptions of parts of the image. Its underlying probabilistic assumptions naturally integrate these two sources of information. We derive an approximate inference and estimation algorithms based on variational methods, as well as efficient approximations for classifying and annotating new images. We examine the performance of our model on two real-world image data sets, illustrating that a single model provides competitive annotation perfor- mance, and superior classification performance."
+				);
+
+				editor.insertImage(new TextImage(200, 200, 200, 200, ""));
+            }
+		</script>
+        
+    </head>
+    <body onload="document_load();">
+		<canvas id="TheOne"></canvas>
+    </body>
+</html>
