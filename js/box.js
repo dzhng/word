@@ -46,7 +46,7 @@ TextBox.prototype.newLine = function()
 	var line = new TextLine();
 	line.setPoint(0, this.curHeight);
 	this.lines.push(line);
-	console.log("new line added, total lines: %d", this.lines.length);
+	//console.log("new line added, total lines: %d", this.lines.length);
 	return true;
 };
 
@@ -147,7 +147,7 @@ TextBox.prototype.getLocationFromPoint = function(x, y)
 	if(c == this.lines.length) {
 		c = this.lines.length-1;
 	}
-	console.log("line %d selected", c);
+	console.log("line %d selected, x: %d, y: %d", c, x, y);
 	// now get the letter within the line
 	var idx = this.lines[c].getPositionFromPoint(x-this.lines[c].x);
 	

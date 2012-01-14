@@ -22,38 +22,38 @@ var Controller = function(model)
     
     // add input event listeners
     this.mouseDownHandler = this.mouseDown.bind(this);
-    window.addEventListener("mousedown", this.mouseDownHandler, false);
+    this.model.canvas.addEventListener("mousedown", this.mouseDownHandler, false);
     
     this.mouseUpHandler = this.mouseUp.bind(this);
-    window.addEventListener("mouseup", this.mouseUpHandler, false);
+	this.model.canvas.addEventListener("mouseup", this.mouseUpHandler, false);
     
     this.mouseMoveHandler = this.mouseMove.bind(this);
-    window.addEventListener("mousemove", this.mouseMoveHandler, false);
+    this.model.canvas.addEventListener("mousemove", this.mouseMoveHandler, false);
     
-    this.mouseWheelHandler = this.mouseWheel.bind(this);
-    window.addEventListener("mousewheel", this.mouseWheelHandler, false);
+    //this.mouseWheelHandler = this.mouseWheel.bind(this);
+    //window.addEventListener("mousewheel", this.mouseWheelHandler, false);
 
 	this.keyDownHandler = this.keyDown.bind(this);
-	window.addEventListener("keydown", this.keyDownHandler, false);
+	this.model.canvas.addEventListener("keydown", this.keyDownHandler, false);
 
 	this.keyUpHandler = this.keyUp.bind(this);
-	window.addEventListener("keyup", this.keyUpHandler, false);
+	this.model.canvas.addEventListener("keyup", this.keyUpHandler, false);
 
 	this.keyPressHandler = this.keyPress.bind(this);
-	window.addEventListener("keypress", this.keyPressHandler, false);
+	this.model.canvas.addEventListener("keypress", this.keyPressHandler, false);
 
 	// setup timer for frame refresh
-	var fps = 2;	// frames per second
+	var fps = 60;	// frames per second
 	setInterval(this.frameRefresh.bind(this), 1000/fps);
 };
 
 /************** EVENT HANDLERS *******************/
 Controller.prototype.mouseDown = function(e)
 {
-	pX = e.pageX;
-	pY = e.pageY;
+	this.pX = e.pageX;
+	this.pY = e.pageY;
 	this.click = true;
-	this.model.updateClick(pX, pY);
+	this.model.updateClick(this.pX, this.pY);
 	// TODO: setup timer for menu popup
 };
 
@@ -65,8 +65,8 @@ Controller.prototype.mouseUp = function(e)
 
 Controller.prototype.mouseMove = function(e)
 {
-	pX = e.pageX;
-	pY = e.pageY;
+	this.pX = e.pageX;
+	this.pY = e.pageY;
 	this.pointerMoved = true;	// set flag to indicate pointer has changed
 };
 
@@ -82,9 +82,9 @@ Controller.prototype.frameRefresh = function()
 	// if pointer is moving while the mouse is held down, it's highlighted
 	if(this.pointerMoved) {
 		if(this.click) {
-			this.model.updateDrag(pX, pY);
+			this.model.updateDrag(this.pX, this.pY);
 		} else {
-			this.model.updateMove(pX, pY);
+			this.model.updateMove(this.pX, this.pY);
 		}
 		this.pointerMoved = false;	// reset pointer moved flag
 	}

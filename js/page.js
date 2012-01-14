@@ -35,7 +35,7 @@ Page.prototype.getBoxFromPoint = function(x, y)
 	console.log("clicked x:%d, y:%d", x,y);
 
 	// stores index of closest box
-	var closest = 0;
+	var closest = -1;
 	// distance to the cloest box
 	var cDist = 99999;
 
@@ -46,31 +46,16 @@ Page.prototype.getBoxFromPoint = function(x, y)
 	} else if(this.boxes.length == 1) {
 		closest = 0;
 	} else { 
-		var a1, b1, a2, b2, box, distance;
 		for(var i = 0; i < this.boxes.length; i++) {
-			box = this.boxes[i];
-			// find the distance between point and box's edge
-			b1 = Math.abs(box.y + box.height/2 - y);
-			a1 = Math.abs(box.x + box.width/2 - x);
-			if(b1 > a1) {
-				// y axis is higher, that means the point must be on top or bottom.
-				// this also means the height is already known
-				b2 = box.height/2;
-				a2 = (b2/b1)*a1;
-			} else {
-				// x axis is higher, this means the point must be on left or right.
-				// this also means the width is already known
-				a2 = box.width/2;
-				b2 = (b1/a1)*a2;
-			}
-			// use pythagoras theorem to find the distance
-			distance = Math.sqrt(Math.pow(a1,2) + Math.pow(b1,2)) - Math.sqrt(Math.pow(a2,2) + Math.pow(b2,2));
-			if(distance < cDist) {
-				cDist = distance;
+			if(this.boxes[i].isHovering(x, y)) {
 				closest = i;
 			}
 		}
+		if(closest == -1) {
+			return false;
+		}
 	}
+	console.log("box %d selected", closest);
 	// convert point to box coordinate space and update cursor location
 	return this.boxes[closest].getLocationFromPoint(x - this.boxes[closest].x, y - this.boxes[closest].y);
 };

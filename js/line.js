@@ -30,10 +30,12 @@ TextLine.prototype.getPositionFromPoint = function(x)
 {
 	// if we go over the length of the line, then it's definitely the last word
 	if(x >= this.length) {
+		console.log("x value too high: %d", x);
 		return this.chars.length;
 	}
 	// if it's negative position, it's before the length, so first position
 	if(x <= 0) {
+		console.log("x value too low: %d", x);
 		return 0;
 	}
 

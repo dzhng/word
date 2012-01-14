@@ -16,7 +16,7 @@ var Model = function()
 	/*** SETUP VIEW ***/
 	// find the correct window size
 	this.width = window.innerWidth;
-	this.height = window.innerHeight;
+	this.height = PAGE_SIZE.height;
 	console.log("window width: %d, height: %d", this.width, this.height);
 
 	// make background transparent
@@ -70,7 +70,6 @@ Model.prototype.clear = function()
 	// clear the page canvas of all drawn objects
 	this.context.fillStyle = this.background;
 	this.context.clearRect(0,0,this.width, this.height);
-	this.redraw = true;
 };
 
 Model.prototype.focus = function()
@@ -142,7 +141,7 @@ Model.prototype.updateSize = function()
 {
 	// find the maximum size of the canavs that would fit on the page
 	this.width = window.innerWidth;
-	this.height = window.innerHeight;
+	this.height = PAGE_SIZE.height;
 	this.canvas.height = this.height;
 	this.canvas.width = this.width;
 	this.changePage(this.currentPage);
