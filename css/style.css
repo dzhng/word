@@ -127,11 +127,6 @@ body    {
 }
 
 /* textEditOptions */
-#textAlginButtonBg{
-	background-position: 24px -1506px;
-	width: 20px;
-	height: 20px;
-}
 #fontSize{
 	height: 20px;
 	width: 65px;
@@ -154,4 +149,29 @@ body    {
 	float: right;
 	margin-top: 3px;
 	margin-right: 9px;
+}
+
+#textAlignLeftButtonBg{
+	background-position: 24px -1506px;
+	width: 20px;
+	height: 20px;
+}
+#textAlignLeft{}
+#textAlignCenter{}
+#textAlignCenterButtonBg{
+	background-position: 0px -187px;
+	width: 20px;
+	height: 20px;
+	margin-left: 2px;}
+#textAlignRightButtonBg{
+	background-position: 3px -1314px;
+	width: 20px;
+	height: 20px;
+}
+#textAlignRight{}
+#textAlignJustify{}
+#textAlignJustifyButtonBg{
+	background-position:;
+	height:20px;
+	width:20px;
 }
