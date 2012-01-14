@@ -42,22 +42,6 @@ Section.prototype.format = function(index)
 	var height = 0;	// stores the width and height of the current word
 	var ch = 0;		// index of the current character
 
-	function nextWord(chars) {
-		var word = [];
-		width = 0;
-		height = 0;
-		while(ch < chars.length) {
-			word.push(chars[ch]);
-			width += chars[ch].width;
-			height = Math.max(chars[i].height, height);
-			// if space encountered, word found
-			if(chars[ch].letter == ' ') {
-				return word;
-			}
-			ch++;
-		}
-		return undefined;
-	};
 
 	// parse into words and insert into box
 	// first iterate through each one of the boxes
@@ -65,21 +49,7 @@ Section.prototype.format = function(index)
 		var boxes = this.model.pages[p].boxes;
 		for(var b = 0; b < boxes.length; b++) {
 			var box = boxes[b];
-			box.reset();
-				
-			//box.addChars(this.chars, index);
-			// keep inserting words until box is full
-			var overflow;
-			do {
-				var word = nextWord(this.chars);
-				if(word === undefined) {
-					console.log("end of word");
-					return true;	// end of chars
-				}
-				overflow = box.insertWord(word, width, height);
-			} while(overflow.length == 0);
-			// reinsert the overflow back into the chars array
-			this.chars.splice(0, 0, overflow);	
+			ch = box.setChar(this.chars, ch);
 		}
 	}
 

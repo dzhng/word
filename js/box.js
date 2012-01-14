@@ -43,11 +43,6 @@ TextBox.prototype = new cObject;
 // add the line to the box, returns the height of space left
 TextBox.prototype.newLine = function()
 {
-	// check for height overflow in the box first
-	if(this.curHeight > this.height) {
-		return false;
-	}
-
 	var line = new TextLine();
 	line.setPoint(0, this.curHeight);
 	this.lines.push(line);
@@ -65,9 +60,59 @@ TextBox.prototype.reset = function()
 // add word to current textbox, return true on success, false on fail
 // the algorithm is keep adding words to the current line, until
 // the line returns a false from either running into obsticles or its full
-TextBox.prototype.insertWord = function(word, width, height)
+// function returns the index where it ends
+TextBox.prototype.setChar = function(chars, index)
 {
+	// reset textbox
+	this.reset();
 	var curLine = this.lines.length - 1;
+
+	// chars in a word
+	var word = [];
+
+	// word size
+	var width = 0;
+	var height = 0;
+
+	// counter
+	var ch = index;
+
+	while(ch < chars.length) {
+		word.push(chars[ch]);
+		width += chars[ch].width;
+		height = Math.max(chars[i].height, height);
+		// if space encountered, word found
+		if(chars[ch].letter == ' ') {
+			// if can't add to this line, make a new line
+			if(this.lines[curLine].width + width < this.width) {
+				// check if this word will fit
+				if((this.curHeight + height) > this.height) {
+					// return the beginning of the current line
+					var lline = this.lines.pop();
+					var idx = lline.chars[0].getIndex();
+					console.log("box full, returning to idx %d", idx);
+					return idx;
+				}
+				this.lines[curLine].insertWord(word, width, height);
+			} else {
+				var lheight = this.lines[curLine].align();
+				// check if the word fits in the box
+				if((this.curHeight + height) > this.height) {
+					// return the beginning of the current line
+					return word[0].getIndex();
+				}
+				this.curHeight += lheight;
+				this.newLine();
+				this.lines[++curLine].insertWord(word, width, height);
+			}
+			// reset word variables
+			width = 0;
+			height = 0;
+			word = [];
+		}
+		ch++;
+	}
+	return ch;
 
 	// see if there are any obsticles in the way, if so, make a new line
 	/*if(this.page.checkObsticle(this.x, this.y, 
@@ -77,21 +122,6 @@ TextBox.prototype.insertWord = function(word, width, height)
 		this.curHeight += this.lines[curLine].height;
 		this.newLine();
 	}*/
-
-	// if can't add to this line, make a new line
-	if(this.lines[curLine].width + width < this.width) {
-		this.lines[curLine].insertWord(word, width, height);
-	} else {
-		this.lines[curLine].align();
-		this.curHeight += this.lines[curLine].height;
-		if(this.newLine() === false) {
-			// this box can't fit any more lines, return the overflow
-			return this.lines.pop().chars;
-		}
-		this.lines[curLine+1].insertWord(word, width, height);
-	}
-
-	return [];
 };
 
 TextBox.prototype.getLocationFromPoint = function(x, y)
