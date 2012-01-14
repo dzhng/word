@@ -6,7 +6,6 @@ var TextLine = function()
 {
 	// buffer to store all the chars
 	this.chars = [];
-	this.textHeight = 0;
 
 	// line margin
 	this.margin = {_top: 0.1, _bottom: 0.1};
@@ -18,7 +17,7 @@ TextLine.prototype = new cObject;
 TextLine.prototype.insertWord = function(word, width, height, margin)
 {
 	this.width += width;
-	this.textHeight = Math.max(height, this.textHeight);
+	this.height = Math.max(height, this.height);
 
 	//TODO: Decide weather to push the last space or not	
 	for(var i = 0; i < word.length; i++) {
@@ -64,11 +63,11 @@ TextLine.prototype.getPositionFromPoint = function(x)
 //			this is so we can split a sentence into 2 lines elegantly, because
 //			a newline is essentially a space
 // alignment = text spacing, could be centered, left, right, even.
+// returns: the final height after alignment
 TextLine.prototype.align = function(len, alignment)
 {
 	// get baseline for drawing the letters (y position)
-	var baseline = this.textHeight * (1+this.margin._top);
-	this.height = this.textHeight * (1+this.margin._top+this.margin._bottom);
+	var baseline = this.height * (1-this.margin._bottom);
 
 	// starting x position for drawing letters, offset from beginning of line
 	var x = 0;
@@ -96,6 +95,7 @@ TextLine.prototype.align = function(len, alignment)
 			// TODO
 			break;
 	}
+	return this.height;
 };
 
 // draw all the chars in the line
