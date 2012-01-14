@@ -43,8 +43,6 @@ var Model = function()
 	this.context.textAlign = "left";
 	this.context.textBaseline = "alphabetic";
 
-	this.redraw = true;		// determines if the canvas needs to be redrawn
-
 	/*** SETUP CONTROLLER ***/
 	// variable deciarations
 	this.controller = new Controller(this);								// user input controller
@@ -83,7 +81,6 @@ Model.prototype.insertPage = function(index)
 	// create a new page that's the same as the template page
 	var page = new settings.template();
 	this.pages.splice(index, 0, page);
-	this.redraw = true;
 
 	console.log("page inserted, total of %d pages", this.pages.length);
 };
@@ -100,28 +97,19 @@ Model.prototype.changePage = function(index)
 	page.x = this.width/2 - page.width/2;
 	page.visible = true;
 
-	this.redraw = true;
+	this.draw();
 };
 
 // draw the current page, as well as the 2 adjecent pages
 Model.prototype.draw = function()
 {
-	if(this.redraw === true) {
+	console.log("draw called");
 
-		// keep inserting new pages until the char can be inserted
-		while(this.section.format(cursor.index-1) === false) {
-			this.insertPage(this.pages.length);
-			this.changePage(this.pages.length-1);
-		}
-
-		this.context.save();
-		this.clear();
-		// redraw the current window
-		this.pages[this.currentPage].draw(this.context);
-		this.context.restore();
-
-		this.redraw = false;
-	}
+	this.context.save();
+	this.clear();
+	// redraw the current window
+	this.pages[this.currentPage].draw(this.context);
+	this.context.restore();
 };
 
 // add a box to continue the current page
@@ -145,14 +133,20 @@ Model.prototype.updateSize = function()
 	this.canvas.height = this.height;
 	this.canvas.width = this.width;
 	this.changePage(this.currentPage);
-	this.redraw = true;
+	this.draw();
 };
 
 Model.prototype.setText = function(text)
 {
 	for(var i = 0; i < text.length; i++) {
-		this.insertChar(text[i]);
+		this.section.insertChar(text[i], cursor.index);
+		// keep inserting new pages until the char can be inserted
+		while(this.section.format(cursor.index-1) === false) {
+			this.insertPage(this.pages.length);
+			this.changePage(this.pages.length-1);
+		}
 	}
+	this.draw();
 };
 
 /************** KEYBOARD HANDLERS *******************/
@@ -160,7 +154,14 @@ Model.prototype.insertChar = function(key)
 {
 	if(key != null) {
 		this.section.insertChar(key, cursor.index);
-		this.redraw = true;
+
+		// keep inserting new pages until the char can be inserted
+		while(this.section.format(cursor.index-1) === false) {
+			this.insertPage(this.pages.length);
+			this.changePage(this.pages.length-1);
+		}
+
+		this.draw();
 	}
 };
 
@@ -173,7 +174,7 @@ Model.prototype.backspace = function()
 	}
 	this.section.chars.splice(--cursor.index, 1);
 	this.section.format();
-	this.redraw = true;
+	this.draw();
 };
 
 /************** MOUSE HANDLERS *******************/
@@ -186,25 +187,25 @@ Model.prototype.updateClick = function(x, y)
 		if(this.pages[this.currentPage].updateClick(x, y) == false) {
 			cursor.index = this.section.chars.length;
 		}
+		this.draw();
 	} else {
 		// if nothing else is clicked, toggle menu visibility
 		this.menuVisible = !this.menuVisible;
 		console.log("menu visible status: %d", this.menuVisible);
 	}
-	this.redraw = true;
 };
 
 // Used to drag highlighted text, or highlighted picture
 Model.prototype.updateDrag = function(x, y)
 {
 	this.pages[this.currentPage].updateDrag(x, y);
-	this.redraw = true;
+	this.draw();
 };
 
 Model.prototype.stopDrag = function()
 {
 	this.pages[this.currentPage].stopDrag();
-	this.redraw = true;
+	this.draw();
 };
 
 // called when mouse moves

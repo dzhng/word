@@ -17,6 +17,8 @@ var Char = function(letter, style, section)
 
 	// section this char belong to
 	this.section = section;
+	// letter index in the section
+	this.index = 0;
 
 	// letter width - obtained from lookup table
 	// if it's an unknown letter, set the default size
@@ -37,12 +39,6 @@ Char.prototype.setPoint = function(x, y)
 {
 	this.x = x;
 	this.y = y;
-};
-
-// get the index of this character in its section
-Char.prototype.getIndex = function()
-{
-	return this.section.chars.indexOf(this);	
 };
 
 Char.prototype.draw = function(context)

@@ -51,9 +51,9 @@ TextLine.prototype.getPositionFromPoint = function(x)
 	console.log("char %d selected", w);
 
 	if(w == this.chars.length) {
-		return this.chars[w-1].getIndex() + 1;
+		return this.chars[w-1].index + 1;
 	} else {
-		return this.chars[w].getIndex();
+		return this.chars[w].index;
 	}
 };
 

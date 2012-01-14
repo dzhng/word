@@ -78,9 +78,12 @@ TextBox.prototype.setChar = function(chars, index)
 	var ch = index;
 
 	while(ch < chars.length) {
+		// set index first so it can be refered back later
+		chars[ch].index = ch;
+		// push into word
 		word.push(chars[ch]);
 		width += chars[ch].width;
-		height = Math.max(chars[i].height, height);
+		height = Math.max(chars[ch].height, height);
 		// if space encountered, word found
 		if(chars[ch].letter == ' ') {
 			// if can't add to this line, make a new line
@@ -89,8 +92,8 @@ TextBox.prototype.setChar = function(chars, index)
 				if((this.curHeight + height) > this.height) {
 					// return the beginning of the current line
 					var lline = this.lines.pop();
-					var idx = lline.chars[0].getIndex();
-					console.log("box full, returning to idx %d", idx);
+					var idx = lline.chars[0].index;
+					//console.log("box full, returning to idx %d", idx);
 					return idx;
 				}
 				this.lines[curLine].insertWord(word, width, height);
@@ -99,7 +102,7 @@ TextBox.prototype.setChar = function(chars, index)
 				// check if the word fits in the box
 				if((this.curHeight + height) > this.height) {
 					// return the beginning of the current line
-					return word[0].getIndex();
+					return word[0].index;
 				}
 				this.curHeight += lheight;
 				this.newLine();

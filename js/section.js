@@ -42,7 +42,6 @@ Section.prototype.format = function(index)
 	var height = 0;	// stores the width and height of the current word
 	var ch = 0;		// index of the current character
 
-
 	// parse into words and insert into box
 	// first iterate through each one of the boxes
 	for(var p = 0; p < this.model.pages.length; p++) {

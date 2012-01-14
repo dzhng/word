@@ -43,7 +43,7 @@ var Controller = function(model)
 	this.model.canvas.addEventListener("keypress", this.keyPressHandler, false);
 
 	// setup timer for frame refresh
-	var fps = 60;	// frames per second
+	var fps = 30;	// frames per second
 	setInterval(this.frameRefresh.bind(this), 1000/fps);
 };
 
@@ -88,7 +88,6 @@ Controller.prototype.frameRefresh = function()
 		}
 		this.pointerMoved = false;	// reset pointer moved flag
 	}
-	this.model.draw();
 };
 
 /************** KEYBOARD FUNCTIONS *******************/
