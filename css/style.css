@@ -9,8 +9,18 @@ body    {
 	solid #444;
 }
 
+#header{
+	height:50px;
+	background:WhiteSmoke;
+	border-bottom:1px solid #D9D9D9;
+	z-index:1000;
+	position:fixed;
+	top:0px;
+	width:100%;
+}
+
 #left-sidebar{
-	position:relative;
+	position:fixed;
 	height:300px;
 	width: 45px;
 	left: 50px;
@@ -26,10 +36,10 @@ body    {
 }
 
 #right-sidebar{
-	position:relative;
+	position:fixed;
 	height:300px;
 	width: 45px;
-	left: 500px;
+	right: 200px;
 	top: 80px;
 	background:WhiteSmoke;
 	border:1px solid #D9D9D9;
