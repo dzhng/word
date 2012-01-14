@@ -10,6 +10,8 @@ var TwoColumns = function()
 					(PAGE_SIZE.width - 2*PPI)/2,
 					PAGE_SIZE.height - 2*PPI, this);
 
+	box1.visible = true;
+	box2.visible = true;
 	this.boxes = [box1, box2];
 };
 

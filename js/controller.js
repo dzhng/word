@@ -43,7 +43,7 @@ var Controller = function(model)
 	window.addEventListener("keypress", this.keyPressHandler, false);
 
 	// setup timer for frame refresh
-	var fps = 25;	// frames per second
+	var fps = 2;	// frames per second
 	setInterval(this.frameRefresh.bind(this), 1000/fps);
 };
 

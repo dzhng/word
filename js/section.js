@@ -56,7 +56,7 @@ Section.prototype.format = function(index)
 			}
 			ch++;
 		}
-		return word;
+		return undefined;
 	};
 
 	// parse into words and insert into box
@@ -67,10 +67,19 @@ Section.prototype.format = function(index)
 			var box = boxes[b];
 			box.reset();
 				
+			//box.addChars(this.chars, index);
 			// keep inserting words until box is full
+			var overflow;
 			do {
 				var word = nextWord(this.chars);
-			} while(box.insertWord(word, width, height) == true);
+				if(word === undefined) {
+					console.log("end of word");
+					return true;	// end of chars
+				}
+				overflow = box.insertWord(word, width, height);
+			} while(overflow.length == 0);
+			// reinsert the overflow back into the chars array
+			this.chars.splice(0, 0, overflow);	
 		}
 	}
 
