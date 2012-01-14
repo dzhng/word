@@ -1,6 +1,7 @@
 // text editor model
 // Keeps track of cursors and pages in document
 // Written by: David Zhang
+//
 
 // TODO: 
 //	Use charcodes (ascii) to get char distance
