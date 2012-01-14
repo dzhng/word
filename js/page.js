@@ -21,6 +21,22 @@ var Page = function(pageSize)
 
 	this.background = "rgb(250,250,250)";
 
+	// create a new canvas element per page
+	this.canvas = document.createElement('canvas');
+	document.body.appendChild(this.canvas);
+	this.canvas.height = this.height;
+	this.canvas.width = this.width;
+	this.canvas.border = "0 px";
+	this.canvas.tabIndex = 1;			// make canvas focusable
+	this.canvas.style.position = "absolute";
+	this.context = this.canvas.getContext("2d");
+
+	this.hide();
+
+	// setup context for drawing
+	this.context.textAlign = "left";
+	this.context.textBaseline = "alphabetic";
+
 	// array of text boxes in the current page
 	this.boxes = [];
 	// array of objects in the current page
@@ -29,9 +45,32 @@ var Page = function(pageSize)
 	this.dragging = null;	// currently dragging object
 };
 
-Page.prototype = new cObject;
-
 /************** BUILTIN FUNCTIONS *******************/
+Page.prototype.setPosition = function(x, y)
+{
+	console.log("page position set to (%d,%d)", x, y);
+	this.canvas.style.top = y;
+	this.canvas.style.left = x;
+};
+
+Page.prototype.setVisible = function()
+{
+	this.canvas.style.visibility = "visible";
+};
+
+Page.prototype.hide = function()
+{
+	this.canvas.style.visibility = "hidden";
+};
+
+// clear the page canvas
+Page.prototype.clear = function()
+{
+	// clear the page canvas of all drawn objects
+	this.context.fillStyle = this.background;
+	this.context.clearRect(0,0,this.width, this.height);
+};
+
 // input is point on the page, using page coordinates
 // find the box nearest to the point on the page, looking at boxes' edges
 Page.prototype.getBoxFromPoint = function(x, y)
@@ -147,18 +186,14 @@ Page.prototype.checkObsticle = function(x, y, width, height)
 	// iterate through upper layers and see if there's anything in the way
 };
 
-Page.prototype.draw = function(context)
+Page.prototype.draw = function()
 {
 	// don't draw if not visible
 	if(!this.visible) {
 		return;
 	}
 
-	context.save();
-	context.translate(this.x, this.y);
-
-	context.fillStyle = this.background;
-	context.fillRect(0,0,this.width, this.height);
+	this.clear();
 
 	// update all objects on page
 	for(var i = 0; i < this.objects.length; i++) {

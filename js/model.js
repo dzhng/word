@@ -28,25 +28,8 @@ var Model = function()
 	// make background transparent
 	this.background = "rgba(255, 255, 255, 0)";
 
-	// create a new canvas element per page
-	this.canvas = document.getElementById("TheOne");
-	this.canvas.height = this.height;
-	this.canvas.width = this.width;
-	this.canvas.border = "0 px";
-	this.canvas.tabIndex = 1;			// make canvas focusable
-	this.canvas.style.visibility = "visible";
-	this.canvas.style.position = "absolute";
-	this.canvas.style.top = 0;
-	this.canvas.style.left = 0;
-	this.context = this.canvas.getContext("2d");
-
 	// clear canvas
-	this.clear();
 	this.menuVisible = false;
-
-	// setup context for drawing
-	this.context.textAlign = "left";
-	this.context.textBaseline = "alphabetic";
 
 	this.redraw = true;		// determines if the canvas needs to be redrawn
 
@@ -57,7 +40,7 @@ var Model = function()
 	/*** SETUP CONTROLLER ***/
 	// variable deciarations
 	this.controller = new Controller(this);								// user input controller
-	this.windows = [];													// array to store all currently viewable window
+	this.pages = [];													// array to store all pages in the model
 	this.sections = [];													// array to store all sections in document
 	this.currentPage = 0;												// currently viewed page, the page to draw
 	this.currentWindow = 0;												// currently selected window	
@@ -76,29 +59,13 @@ var Model = function()
 	// handler to update draws on window resize
 	this.updateSize();
 	window.onresize = this.updateSize.bind(this);
-	// focus on new pages
-	this.focus();
-};
-
-/************** VIEW FUNCTIONS **************/
-Model.prototype.clear = function()
-{
-	// clear the page canvas of all drawn objects
-	this.context.fillStyle = this.background;
-	this.context.clearRect(0,0,this.width, this.height);
-	this.redraw = true;
-};
-
-Model.prototype.focus = function()
-{
-	this.canvas.focus();
 };
 
 /************** BUILTIN FUNCTIONS *******************/
 Model.prototype.insertPage = function(index)
 {
 	var page = new Page(PAGE_SIZE);
-	this.windows.splice(index, 0, page);
+	this.pages.splice(index, 0, page);
 	this.redraw = true;
 };
 
@@ -106,13 +73,13 @@ Model.prototype.insertPage = function(index)
 Model.prototype.changePage = function(index)
 {
 	// hide current page
-	this.windows[this.currentPage].visible = false;
+	this.pages[this.currentPage].hide();
 	// make new page
 	this.currentPage = index;
 	// make current page in middle of screen, draw left page and right page
-	var page = this.windows[this.currentPage];
-	page.x = this.width/2 - page.width/2;
-	page.visible = true;
+	var page = this.pages[this.currentPage];
+	page.setPosition(this.width/2 - page.width/2, 20);
+	page.setVisible();
 
 	this.redraw = true;
 };
@@ -121,14 +88,8 @@ Model.prototype.changePage = function(index)
 Model.prototype.draw = function()
 {
 	if(this.redraw === true) {
-		this.context.save();
-
-		this.clear();
 		// redraw the current window
-		this.windows[this.currentWindow].draw(this.context);
-
-		this.context.restore();
-
+		this.pages[this.currentWindow].draw();
 		this.redraw = false;
 	}
 };
@@ -141,20 +102,20 @@ Model.prototype.newSection = function(box)
 	cursor.section = section;
 	cursor.index = 0;
 	this.sections.push(section);
-	this.windows[this.currentPage].addBox(box);
+	this.pages[this.currentPage].addBox(box);
 };
 
 // add a box to continue the current section
 Model.prototype.insertBox = function(index)
 {
 	var box = cursor.section.cloneBox(index);
-	this.windows[this.currentPage].addBox(box);
+	this.pages[this.currentPage].addBox(box);
 };
 
 // add a new image to the current page
 Model.prototype.insertImage = function(image)
 {
-	this.windows[this.currentPage].addImage(image);
+	this.pages[this.currentPage].addImage(image);
 };
 
 // rescale the page to fit on one window
@@ -163,8 +124,6 @@ Model.prototype.updateSize = function()
 	// find the maximum size of the canavs that would fit on the page
 	this.width = window.innerWidth;
 	this.height = window.innerHeight;
-	this.canvas.height = this.height;
-	this.canvas.width = this.width;
 	this.changePage(this.currentPage);
 	this.redraw = true;
 };
@@ -202,9 +161,8 @@ Model.prototype.backspace = function()
 // called by the controller to update the model and redraw
 Model.prototype.updateClick = function(x, y)
 {
-	this.focus();
-	if(this.windows[this.currentWindow].isHovering(x, y)) {
-		this.windows[this.currentWindow].updateClick(x, y);
+	if(this.pages[this.currentWindow].isHovering(x, y)) {
+		this.pages[this.currentWindow].updateClick(x, y);
 	} else {
 		// if nothing else is clicked, toggle menu visibility
 		this.menuVisible = !this.menuVisible;
@@ -217,13 +175,13 @@ Model.prototype.updateClick = function(x, y)
 // Used to drag highlighted text, or highlighted picture
 Model.prototype.updateDrag = function(x, y)
 {
-	this.windows[this.currentWindow].updateDrag(x, y);
+	this.pages[this.currentWindow].updateDrag(x, y);
 	this.redraw = true;
 };
 
 Model.prototype.stopDrag = function()
 {
-	this.windows[this.currentWindow].stopDrag();
+	this.pages[this.currentWindow].stopDrag();
 	this.redraw = true;
 };
 
