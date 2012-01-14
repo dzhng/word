@@ -40,23 +40,24 @@ Section.prototype.format = function(index)
 {
 	var width = 0;
 	var height = 0;	// stores the width and height of the current word
-
 	var ch = 0;		// index of the current character
-	function nextWord() {
+
+	function nextWord(chars) {
 		var word = [];
 		width = 0;
 		height = 0;
-		while(ch++ < this.chars.length) {
-			word.push(this.chars[ch]);
-			width += this.chars[ch].width;
-			height = Math.max(this.chars[i].height, height);
+		while(ch < chars.length) {
+			word.push(chars[ch]);
+			width += chars[ch].width;
+			height = Math.max(chars[i].height, height);
 			// if space encountered, word found
-			if(this.chars[ch].letter == ' ') {
+			if(chars[ch].letter == ' ') {
 				return word;
 			}
+			ch++;
 		}
 		return word;
-	}
+	};
 
 	// parse into words and insert into box
 	// first iterate through each one of the boxes
@@ -68,7 +69,7 @@ Section.prototype.format = function(index)
 				
 			// keep inserting words until box is full
 			do {
-				var word = nextWord();
+				var word = nextWord(this.chars);
 			} while(box.insertWord(word, width, height) == true);
 		}
 	}

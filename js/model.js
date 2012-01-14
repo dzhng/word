@@ -10,6 +10,9 @@
 /************** OBJECT DECLARATION *******************/
 var Model = function()
 {
+	// set default page template as two columns
+	settings.template = TwoColumns;
+
 	/*** SETUP VIEW ***/
 	// find the correct window size
 	this.width = window.innerWidth;
@@ -41,10 +44,6 @@ var Model = function()
 	this.context.textBaseline = "alphabetic";
 
 	this.redraw = true;		// determines if the canvas needs to be redrawn
-
-	// setup bing search window
-	// TODO: User jQuery for this
-	//var search = new SearchWindow(this);
 
 	/*** SETUP CONTROLLER ***/
 	// variable deciarations
@@ -82,8 +81,10 @@ Model.prototype.focus = function()
 /************** BUILTIN FUNCTIONS *******************/
 Model.prototype.insertPage = function(index)
 {
+	console.log("page inserted, total of %d pages", this.pages.length);
+
 	// create a new page that's the same as the template page
-	var page = new settings.template; 
+	var page = new settings.template();
 	this.pages.splice(index, 0, page);
 	this.redraw = true;
 };
@@ -107,12 +108,17 @@ Model.prototype.changePage = function(index)
 Model.prototype.draw = function()
 {
 	if(this.redraw === true) {
-		this.context.save();
 
+		// keep inserting new pages until the char can be inserted
+		while(this.section.format(cursor.index-1) === false) {
+			this.insertPage(this.pages.length);
+			this.changePage(this.pages.length-1);
+		}
+
+		this.context.save();
 		this.clear();
 		// redraw the current window
 		this.pages[this.currentPage].draw(this.context);
-
 		this.context.restore();
 
 		this.redraw = false;
@@ -155,11 +161,6 @@ Model.prototype.insertChar = function(key)
 {
 	if(key != null) {
 		this.section.insertChar(key, cursor.index);
-		// keep inserting new pages until the char can be inserted
-		while(this.section.format(cursor.index-1) == false) {
-			this.insertPage(this.pages.length);
-			this.changePage(this.pages.length-1);
-		}
 		this.redraw = true;
 	}
 };
@@ -182,11 +183,13 @@ Model.prototype.updateClick = function(x, y)
 {
 	this.focus();
 	if(this.pages[this.currentPage].isHovering(x, y)) {
-		this.pages[this.currentPage].updateClick(x, y);
+		// if the page failed to update click, it didn't select any object. Default to the last char in the section
+		if(this.pages[this.currentPage].updateClick(x, y) == false) {
+			cursor.index = this.section.chars.length;
+		}
 	} else {
 		// if nothing else is clicked, toggle menu visibility
 		this.menuVisible = !this.menuVisible;
-		this.search.visible = this.menuVisible;
 		console.log("menu visible status: %d", this.menuVisible);
 	}
 	this.redraw = true;

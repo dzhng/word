@@ -9,15 +9,11 @@
 // There is no concept of page margin in <INSERT NAME HERE>, this is abstracted away
 // by the object oriented model of using dynmanicly placed boxes
 
-/************** CONSTNATS *******************/ 
-
-/************** GLOBAL VARIABLES *******************/
-
 /************** OBJECT DECLARATION *******************/
-var Page = function(pageSize)
+var Page = function()
 {
-	this.width = pageSize.width;
-	this.height = pageSize.height;
+	this.width = PAGE_SIZE.width;
+	this.height = PAGE_SIZE.height;
 
 	this.background = "rgb(250,250,250)";
 
@@ -76,8 +72,7 @@ Page.prototype.getBoxFromPoint = function(x, y)
 		}
 	}
 	// convert point to box coordinate space and update cursor location
-	this.boxes[closest].getLocationFromPoint(x - this.boxes[closest].x, y - this.boxes[closest].y);
-	return true;
+	return this.boxes[closest].getLocationFromPoint(x - this.boxes[closest].x, y - this.boxes[closest].y);
 };
 
 Page.prototype.getObjectFromPoint = function(x, y)
@@ -138,13 +133,14 @@ Page.prototype.updateClick = function(x, y)
 	// first see if an object can be selected
 	if(this.getObjectFromPoint(x-this.x, y-this.y) == false) {
 		// find new section and index for cursor
-		this.getBoxFromPoint(x-this.x, y-this.y);
+		return this.getBoxFromPoint(x-this.x, y-this.y);
 	}
 };
 
 Page.prototype.checkObsticle = function(x, y, width, height)
 {
 	// iterate through upper layers and see if there's anything in the way
+	return true;
 };
 
 Page.prototype.draw = function(context)

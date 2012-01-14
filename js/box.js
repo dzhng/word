@@ -11,7 +11,7 @@
 /************** GLOBAL VARIABLES *******************/
 
 /************** OBJECT DECLARATION *******************/
-var TextBox = function(x, y, Width, Height, Section, Page)
+var TextBox = function(x, y, Width, Height, Page)
 {
 	// save the point of this box in page coordinates
 	this.setPoint(x, y);
@@ -95,8 +95,7 @@ TextBox.prototype.getLocationFromPoint = function(x, y)
 	// check if it's an empty box
 	if(this.lines.length <= 0) {
 		console.log("box empty, going back to last index of section");
-		cursor.index = cursor.section.chars.length;
-		return;
+		return false;
 	}
 
 	// reset column and word
@@ -120,7 +119,7 @@ TextBox.prototype.getLocationFromPoint = function(x, y)
 	
 	// set cursor position
 	cursor.index = idx;
-	return;
+	return true;
 };
 
 TextBox.prototype.draw = function(context)
