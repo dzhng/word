@@ -1,5 +1,12 @@
+html{
+	background: url(../images/black_pattern08.jpg) no-repeat center center fixed;
+	-webkit-background-size: cover;
+    -moz-background-size: cover;
+	-o-background-size: cover;
+    background-size: cover;
+}
+
 body    { 
-	background: url("images/desktop.png"); 
 	margin: 0; 
 }
 
@@ -19,23 +26,23 @@ body    {
 	width:100%;
 }
 
-#left-sidebar{
+#leftSidebar{
 	position:fixed;
 	height:300px;
-	width: 45px;
+	width: 90px;
 	left: 50px;
 	top: 80px;
 	background:WhiteSmoke;
 	border:1px solid #D9D9D9;
 	z-index:1000;	
 
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-	border-radius: 10px; /* future proofing */
-	-khtml-border-radius: 10px; /* for old Konqueror browsers */
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px; /* future proofing */
+	-khtml-border-radius: 3px; /* for old Konqueror browsers */
 }
 
-#right-sidebar{
+#rightSidebar{
 	position:fixed;
 	height:300px;
 	width: 45px;
@@ -45,9 +52,84 @@ body    {
 	border:1px solid #D9D9D9;
 	z-index:1000;	
 
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-	border-radius: 10px; /* future proofing */
-	-khtml-border-radius: 10px; /* for old Konqueror browsers */
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px; /* future proofing */
+	-khtml-border-radius: 3px; /* for old Konqueror browsers */
 }
 
+/* Left Sidebar styling */
+.docButton{
+	width:25px;
+	height:25px;
+	margin-top:5px;
+	margin-left:12px;
+	border: 1px solid WhiteSmoke;	
+	float:left;	
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px; /* future proofing */
+	-khtml-border-radius: 2px; /* for old Konqueror browsers */
+
+}
+
+.docButton:hover{
+	border:1px solid #ccc;
+}
+
+.docButton:active{
+	border:1px solid #ccc;
+	-moz-box-shadow: inset 0 1px 2px #ccc;
+	-webkit-box-shadow: inset 0 1px 2px #ccc;
+	box-shadow: inset 0 1px 2px #ccc;
+}
+
+.docButtonClicked{
+	border:1px solid #ccc;
+	-moz-box-shadow: inset 0 1px 2px #ccc;
+	-webkit-box-shadow: inset 0 1px 2px #ccc;
+	box-shadow: inset 0 1px 2px #ccc;
+	/*gradient Background*/
+	background-color:#EEE;
+	
+}
+.menuButtonBg{
+	background:url(../icons/ui.png);
+}
+#menuBreakBar{
+	background-color:#D9D9D9;
+	height:1px;
+	width:75px;
+	margin-top:69px;
+	margin-left:8px;
+	clear:both;
+}
+/* Left Sidebar Menu backgrounds*/
+
+#pointerButtonBg{
+	background-position: -20px -145px;
+	height:100%;
+	width:100%;}
+#textBoxButtonBg{
+	background-position: 0px -1577px;
+	height: 18px;
+	width: 19px;
+	margin-top: 4px;
+	margin-left: 2.8px;} 
+#insertImageButtonBg{background-position: -19px -1485px;
+	height: 20px;
+	width: 20px;}
+#drawShapeButtonBg{
+	background-position: 0px -1105px;
+	height: 20px;
+	Width: 20px;
+	margin-left: 2px;
+	margin-top: 1px;
+}
+
+/* textEditOptions */
+#textAlginButtonBg{
+	background-position: 24px -1506px;
+	width: 20px;
+	height: 20px;
+}
