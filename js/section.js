@@ -18,37 +18,9 @@ var Section = function(model)
 	this.chars = [];
 
 	this.model = model;
-
-	// make a new box and add to box array
-	box.section = this;
-	this.boxes = [box];
 };
 
 /************** BUILTIN FUNCTIONS *******************/
-// add a new box at index in section box array, property will be cloned
-// from index box
-Section.prototype.cloneBox = function(index)
-{
-	var newBox, idx;
-
-	// add a new box that's a duplicate of the box at index
-	if(index < 0) {
-		newBox = this.boxes[0].clone();	
-		idx = 0;
-	} else if (index >= this.boxes.length) {
-		newBox = this.boxes[this.boxes.length-1].clone();
-		idx = this.boxes.length;
-	} else {
-		newBox = this.boxes[index].clone();
-		idx = index;
-	}
-
-	// insert into array
-	this.boxes.splice(idx, 0, newBox);
-	// return new box so it can be added to a page
-	return newBox;
-};
-
 // insert char at the current cursor location
 Section.prototype.insertChar = function(key, index)
 {
@@ -66,35 +38,47 @@ Section.prototype.insertChar = function(key, index)
 // index = index to start the process
 Section.prototype.format = function(index)
 {
-	var box;
 	var width = 0;
 	var height = 0;	// stores the width and height of the current word
-	var word = [];
-	var curbox = 0;
 
-	// start with first box
-	box = this.boxes[curbox];
-	box.reset();
+	var ch = 0;		// index of the current character
+	function nextWord() {
+		var word = [];
+		width = 0;
+		height = 0;
+		while(ch++ < this.chars.length) {
+			word.push(this.chars[ch]);
+			width += this.chars[ch].width;
+			height = Math.max(this.chars[i].height, height);
+			// if space encountered, word found
+			if(this.chars[ch].letter == ' ') {
+				return word;
+			}
+		}
+		return word;
+	}
 
 	// parse into words and insert into box
-	for(var i = 0; i < this.chars.length; i++) {
-		word.push(this.chars[i]);
-		width += this.chars[i].width;
-		height = Math.max(this.chars[i].height, height);
-		if(this.chars[i].letter == ' ') {
-			while(box.insertWord(word, width, height)==false) {
-				// TODO: need to finish this
-				// if there are still boxes in the box array in this section
-				if(++curbox < this.boxes.length) {
-					box = this.boxes[curbox];
-					box.reset();
-				} else {	// that was the last box, create a new box and add to page
-				}
-			}
-			word = [];
-			width = 0;
-			height = 0;
+	// first iterate through each one of the boxes
+	for(var p = 0; p < this.model.pages.length; p++) {
+		var boxes = this.model.pages[p].boxes;
+		for(var b = 0; b < boxes.length; b++) {
+			var box = boxes[b];
+			box.reset();
+				
+			// keep inserting words until box is full
+			do {
+				var word = nextWord();
+			} while(box.insertWord(word, width, height) == true);
 		}
+	}
+
+	// if there's still characters left over, return false to signal to model that we need to
+	// make a new page
+	if(ch < this.chars.length) {
+		return false;
+	} else {
+		return true;
 	}
 };
 

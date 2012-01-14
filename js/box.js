@@ -26,8 +26,6 @@ var TextBox = function(x, y, Width, Height, Section, Page)
 	this.fixed = true;
 	this.stopDistance = PPI;	// distance from bottom of the page to stop expanding (margin)
 
-	// the section this box belongs to
-	this.section = Section || cursor.section;
 	// the page this box belongs to
 	this.page = Page || undefined;
 
@@ -97,7 +95,6 @@ TextBox.prototype.getLocationFromPoint = function(x, y)
 	// check if it's an empty box
 	if(this.lines.length <= 0) {
 		console.log("box empty, going back to last index of section");
-		cursor.section = this.section;
 		cursor.index = cursor.section.chars.length;
 		return;
 	}
@@ -122,7 +119,6 @@ TextBox.prototype.getLocationFromPoint = function(x, y)
 	var idx = this.lines[c].getPositionFromPoint(x-this.lines[c].x);
 	
 	// set cursor position
-	cursor.section = this.section;
 	cursor.index = idx;
 	return;
 };

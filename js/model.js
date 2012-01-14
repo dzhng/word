@@ -12,6 +12,10 @@ var PPI = 72;												// pixel per inch to calibrate everything to
 var PAGE_SIZE = {width: 8.5*PPI, height: 11*PPI};			// size for one page, standard paper size, in inches
 
 /************** GLOBAL VARIABLES *******************/
+// global persistant settings
+// template: template page variable
+var settings = {template: TwoColumns};
+
 // initialize the curser at default position, also keeps track of current page, box..etc
 // index: the index of the cursor in the text, (x,y): location of the cursor on the current page, style: style at the current cursor
 var cursor = {index: 0, x: 0, y: 0, style: new Style("rgb(0,0,0)", "Arial", "Normal", "11", "none", "even")};
@@ -62,14 +66,8 @@ var Model = function()
 	this.pages = [];													// array to store all currently viewable window
 	this.currentPage = 0;												// currently viewed page, the page to draw
 	
-	// make the default full page box
-	var box = new TextBox(PPI, PPI,	// offset box by 1 inch from page by default;		
-					PAGE_SIZE.width - 2*PPI,
-					PAGE_SIZE.height - 2*PPI);
-
-	// make new pages and sections
+	// make new pages
 	this.insertPage(0);
-	this.newSection(box);
 	// change to the newly inserted page
 	this.changePage(0);
 
@@ -97,7 +95,8 @@ Model.prototype.focus = function()
 /************** BUILTIN FUNCTIONS *******************/
 Model.prototype.insertPage = function(index)
 {
-	var page = new Page(PAGE_SIZE);
+	// create a new page that's the same as the template page
+	var page = new settings.template; 
 	this.pages.splice(index, 0, page);
 	this.redraw = true;
 };
@@ -133,21 +132,9 @@ Model.prototype.draw = function()
 	}
 };
 
-// Make a new section along with a new box and add to next available page
-Model.prototype.newSection = function(box)
-{
-	var section = new Section(box);
-
-	cursor.section = section;
-	cursor.index = 0;
-	this.sections.push(section);
-	this.pages[this.currentPage].addBox(box);
-};
-
-// add a box to continue the current section
+// add a box to continue the current page
 Model.prototype.insertBox = function(index)
 {
-	var box = cursor.section.cloneBox(index);
 	this.pages[this.currentPage].addBox(box);
 };
 
@@ -180,8 +167,10 @@ Model.prototype.setText = function(text)
 Model.prototype.insertChar = function(key)
 {
 	if(key != null) {
-		cursor.section.insertChar(key, cursor.index);
-		cursor.section.format(cursor.index-1);
+		this.section.insertChar(key, cursor.index);
+		while(this.section.format(cursor.index-1) == false) {
+			this.insertPage(this.pages.length);
+		}
 		this.redraw = true;
 	}
 };
@@ -193,8 +182,8 @@ Model.prototype.backspace = function()
 	if(cursor.index <= 0) {
 		return;
 	}
-	cursor.section.chars.splice(--cursor.index, 1);
-	cursor.section.format();
+	this.section.chars.splice(--cursor.index, 1);
+	this.section.format();
 	this.redraw = true;
 };
 
