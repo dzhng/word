@@ -3,6 +3,7 @@ var Menu = function()
 
 	
 	this.toggleFontSizeMenu = false //starts not visible
+	this.fontSize=12;
 
 	/*//Set the different variables in the Menu
 	
@@ -14,7 +15,6 @@ var Menu = function()
 
 	//Initialize text editting values
 	this.font= "Arial";
-	this.fontSize=10;
 	this.alignLeft = null;
 	this.alignRight = null;
 	this.alignCenter = null;
@@ -53,10 +53,6 @@ var Menu = function()
 	var selectFont = document.getElementById("font");
 	selectFont.addEventListener("mousedown", this.mouseDownHandler, false);
 
-	//select fontSize 	
-    this.mouseDownHandler = this.fontSizeDown.bind(this);
-	var fontSize = document.getElementById("fontSize");
-	fontSize.addEventListener("mousedown", this.mouseDownHandler, false);
 
 
 	//select alignleft
@@ -122,15 +118,20 @@ var Menu = function()
 	//fontSize event handler
 	this.mouseDownHandler = this.toggleNavMenu.bind(this);
 	var fontSizeClick = document.getElementById("fontSize");
-	fontSizeClick.addEventListener("mousedown", this.mouseDownHandler, false);
+	fontSizeClick.addEventListener("mousedown", this.mouseDownHandler, false);	
+	
+	//fontSize Choices Event handler
+	//8pt
+    this.mouseDownHandler = this.setFont8pt.bind(this);
+	var fontSize8 = document.getElementById("8pt");
+	fontSize8.addEventListener("mousedown", this.mouseDownHandler, false);
 
 };
 
 
 Menu.prototype.toggleNavMenu = function(e)
 {
-	this.dropdown = document.getElementById("dropDownSizes");
-	
+	this.dropdown = document.getElementById("dropDownSizes");	
 	if(!this.toggleFontSizeMenu){
 		this.toggleFontSizeMenu = true;
 		this.dropdown.style.display = "block";
@@ -139,18 +140,11 @@ Menu.prototype.toggleNavMenu = function(e)
 		this.toggleFontSizeMenu = false;
 		this.dropdown.style.display = "none";
 	};
-
-	
-
 };
 
-
-
-
-Menu.prototype.cursorDown = function(e)
+Menu.prototype.setFont8pt = function(e)
 {
-	this.pX = e.pageX;
-	this.pY = e.pageY;
+	this.fontSize = 8;
 };
 
 Menu.prototype.textBoxDown = function(e)
