@@ -97,8 +97,6 @@ Model.prototype.draw = function()
 {
 	//console.log("draw called");
 	this.context.save();
-	this.context.clearRect(0,0,this.width, this.height);
-
 	// redraw the current window
 	this.pages[this.currentPage].draw(this.context);
 	this.context.restore();
@@ -145,7 +143,6 @@ Model.prototype.setText = function(text)
 Model.prototype.insertChar = function(key)
 {
 	if(key != null) {
-		console.profile();
 		this.section.insertChar(key, cursor.index);
 
 		// keep inserting new pages until the char can be inserted
@@ -155,7 +152,6 @@ Model.prototype.insertChar = function(key)
 		}
 
 		this.draw();
-		console.profileEnd();
 	}
 };
 

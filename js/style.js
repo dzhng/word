@@ -21,11 +21,9 @@ var Style = function(color, type, style, size, script, align)
 	// white space to put on top and bottom of word, as percentage of font height
 	// line element will take the highest margin as default
 	this.margin = {_top: 0.1, _bottom: 0.1};
-
-	this.fontString = this.genFontString();
 };
 
-Style.prototype.genFontString = function()
+Style.prototype.fontString = function()
 {
 	return this.style + " " + this.size + "px " + this.type;
 };
