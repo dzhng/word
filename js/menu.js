@@ -1,6 +1,6 @@
 var Menu = function()
 {
-	//Set the different variables in the Menu
+	/*//Set the different variables in the Menu
 	
 	//Different tools defaulting to normal cusor
 	this.cursor = true;
@@ -32,7 +32,7 @@ var Menu = function()
 	//select textBox
     this.mouseDownHandler = this.mouseDown.bind(this);
 	var selectTextBox = document.getElementById("textBoxButton");
-	selectTextBox.addEventListener("mousedown", this.mouseDownHandler, false;
+	selectTextBox.addEventListener("mousedown", this.mouseDownHandler, false);
 			
 	//select insertImage	
     this.mouseDownHandler = this.mouseDown.bind(this);
@@ -63,7 +63,7 @@ var Menu = function()
 	//select alignCenter
     this.mouseDownHandler = this.mouseDown.bind(this);
 	var alignCenter = document.getElementById("textAlignCenter");
-	alignCenter.addEventListener("mousedown", this.mouseDownHandler, false;
+	alignCenter.addEventListener("mousedown", this.mouseDownHandler, false);
 			
 	//select alignRight 
     this.mouseDownHandler = this.mouseDown.bind(this);
@@ -113,7 +113,7 @@ var Menu = function()
 	//select strikethrough
     this.mouseDownHandler = this.mouseDown.bind(this);
 	var selectStrikethrough = document.getElementById("textStrikethrough");
-	selectStrikethrough.addEventListener("mousedown", this.mouseDownHandler, false);
+	selectStrikethrough.addEventListener("mousedown", this.mouseDownHandler, false);*/
 };
 
 Menu.prototype.mouseDown = function(e)
