@@ -193,9 +193,6 @@ TextBox.prototype.draw = function(context)
 	context.save();
 	context.translate(this.x, this.y);	// all object points are relative to the parent
 
-	context.font = cursor.style.fontString;
-	context.fillStyle = cursor.style.color;
-
 	// call model draw function, pass it canvas context
 	for(var l=0; l < this.lines.length; l++) {
 		this.lines[l].draw(context);

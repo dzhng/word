@@ -97,8 +97,6 @@ Model.prototype.draw = function()
 {
 	//console.log("draw called");
 	this.context.save();
-	this.context.clearRect(0,0,this.width, this.height);
-
 	// redraw the current window
 	this.pages[this.currentPage].draw(this.context);
 	this.context.restore();
