@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        
+        <title>HTML5 Canvas Editor Research</title>
+
+		<!-- CSS Style Sheet -->
+		<link href="css/style.css" rel="stylesheet" type="text/css" />
+
+		<!-- Javascript -->
+        <script type="text/javascript" src="js/browser.js"></script>
+        <script type="text/javascript" src="js/style.js"></script>
+        <script type="text/javascript" src="js/globals.js"></script>
+        <script type="text/javascript" src="js/size.js"></script>
+        <script type="text/javascript" src="js/object.js"></script>
+        <script type="text/javascript" src="js/point.js"></script>
+        <script type="text/javascript" src="js/box.js"></script>
+        <script type="text/javascript" src="js/image.js"></script>
+        <script type="text/javascript" src="js/page.js"></script>
+        <script type="text/javascript" src="js/templates.js"></script>
+        <script type="text/javascript" src="js/controller.js"></script>
+        <script type="text/javascript" src="js/section.js"></script>
+        <script type="text/javascript" src="js/bing.js"></script>
+        <script type="text/javascript" src="js/search.js"></script>
+        <script type="text/javascript" src="js/char.js"></script>
+        <script type="text/javascript" src="js/line.js"></script>
+        <script type="text/javascript" src="js/function.js"></script>
+        <script type="text/javascript" src="js/model.js"></script>
+        <script type="text/javascript">
+            function document_load() {	// Setup editor
+                var editor = new Model();
+
+				editor.setText(
+						"I loved talking to the skankiest prostitutes at three in the morning with a camera crew around me, fires burning in the street, sad, abused people clinging to scraps of life for their pleasures, bailed out prisoners and the drug dealers waiting for them to be released, homeless addicts with nowhere to go and they only weren’t freaks if you saw them at three in the morning. In short,  I loved my job. Entrepreneurship ruined it. I’m not like how Mark Zuckerberg describes himself: 'a builder'. My guess is, I’m not like most of the smart people who read this blog who go out there and build things to improve the lives of others. And yet, I kept doing it to myself over and over again. Once you enter the world of 'eat what you kill' you can’t go back to being spoon-fed by the pencil factory anymore. Sadly. I write about my first job here (and the prostitutes). I had a regular job at HBO. My title: Junior Programmer Analyst in the IT department. I told HBO, 'you do original TV programming so why not do original web programming.' And magically, from 1996-98, they let me do whatever I wanted to do at three in the morning and then put it on their website.  My original job was to do some Unix/ Oracle thing that I was totally unqualified for and didn’t know how to do. So I figured out a more fun idea for myself and persuaded them to let me do it."
+				);
+
+				editor.insertImage(new TextImage(200, 200, 200, 200, ""));
+            }
+		</script>
+        
+    </head>
+    <body onload="document_load();">
+		
+		<div id="header" style="visibility:hidden;">
+			
+		</div>
+		<!-- Left Sidebar contains tool for utilizing while constructing contents on a page-->
+		<div id="leftSidebar">
+			<div id="pointerButton" class="docButton" >
+				<div id="pointerButtonBg"class="menuButtonBg"></div>	
+			</div>
+
+			<div id="textBoxButton" class="docButton" >
+				<div id="textBoxButtonBg"class="menuButtonBg"></div>	
+			</div>
+			
+			<div id="insertImageButton" class="docButton" >
+				<div id="insertImageButtonBg"class="menuButtonBg"></div>	
+			</div>
+			
+			<div id="drawShapeButton" class="docButton" >
+				<div id="drawShapeButtonBg"  class="menuButtonBg"></div>	
+			</div>
+			
+			<div id="menuBreakBar"></div>
+			
+			<div id="textEditOptions">
+				
+				<div id="fontSize" class="docButton" >
+					<div id="fontSizeLabel">10pt</div>
+					<div id="dropDownArrow" class="menuButtonBg"></div>
+				</div>
+
+				<div id="textAlignLeft" class="docButton" >
+					<div id="textAlignLeftButtonBg" class="menuButtonBg"></div>	
+				</div>
+
+				<div id="textAlignCenter" class="docButton" >
+					<div id="textAlignCenterButtonBg" class="menuButtonBg"></div>	
+				</div>
+
+				<div id="textAlignRight" class="docButton" >
+					<div id="textAlignRightButtonBg" class="menuButtonBg"></div>	
+				</div>
+				
+				<div id="" class="docButton" >
+					<div id=""class="menuButtonBg"></div>	
+				</div>
+				
+				<div id="" class="docButton" >
+					<div id=""class="menuButtonBg"></div>	
+				</div>
+			</div><!-- closes texEditOptions -->
+		</div><!-- closes leftSidebar -->
+		<!-- Right Sidebar contains .... -->
+		<div id="rightSidebar" style="visibility:hidden;" >
+		
+		</div>
+
+
+	</body>
+</html>
