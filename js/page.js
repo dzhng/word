@@ -28,6 +28,38 @@ var Page = function()
 Page.prototype = new cObject;
 
 /************** BUILTIN FUNCTIONS *******************/
+// input is point on the page, using page coordinates
+// find the box nearest to the point on the page, looking at boxes' edges
+Page.prototype.getBoxFromPoint = function(x, y)
+{
+	console.log("clicked x:%d, y:%d", x,y);
+
+	// stores index of closest box
+	var closest = -1;
+	// distance to the cloest box
+	var cDist = 99999;
+
+	// if there are only one box on page, then no need to do any math
+	if(this.boxes.length <= 0) {
+		console.log("No boxes found on this page\n");
+		return false;
+	} else if(this.boxes.length == 1) {
+		closest = 0;
+	} else { 
+		for(var i = 0; i < this.boxes.length; i++) {
+			if(this.boxes[i].isHovering(x, y)) {
+				closest = i;
+			}
+		}
+		if(closest == -1) {
+			return false;
+		}
+	}
+	console.log("box %d selected", closest);
+	// convert point to box coordinate space and update cursor location
+	return this.boxes[closest].getLocationFromPoint(x - this.boxes[closest].x, y - this.boxes[closest].y);
+};
+
 Page.prototype.getObjectFromPoint = function(x, y)
 {
 	// iterate through all objects and see if any is hovering
