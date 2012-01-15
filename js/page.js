@@ -10,8 +10,10 @@
 // by the object oriented model of using dynmanicly placed boxes
 
 /************** OBJECT DECLARATION *******************/
-var Page = function()
+var Page = function(model)
 {
+	this.model = model || null;
+
 	this.width = PAGE_SIZE.width;
 	this.height = PAGE_SIZE.height;
 
@@ -80,6 +82,11 @@ Page.prototype.updateDrag = function(x, y)
 {
 	if(this.dragging != null) {
 		this.dragging.setPoint(x-this.x-this.dragging.xoff, y-this.y-this.dragging.yoff);
+		// format if there's any text on the page
+		if(this.boxes[0].lines[0].chars[0] != undefined) {
+			var idx = this.boxes[0].lines[0].chars[0].index;
+			this.model.section.format(idx);	// reformat all text starting with the first letter on the page
+		} 
 	}
 };
 
@@ -145,7 +152,7 @@ Page.prototype.checkObsticle = function(x, y, width, height)
 				return {nX: x, nWidth: obj.x-x};
 			} else if((obj.x+obj.width > x) && (obj.x+obj.width < x+width)) {
 				// object is on the left side, shift x value right and change width so its shorter
-				console.log("width: %d", (x+width - (obj.x+obj.width)));
+				//console.log("width: %d", (x+width - (obj.x+obj.width)));
 				return {nX: (obj.x+obj.width), nWidth: (x+width - (obj.x+obj.width))};
 			}
 		}

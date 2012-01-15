@@ -1,6 +1,6 @@
 var Menu = function()
 {
-	//Set the different variables in the Menu
+	/*//Set the different variables in the Menu
 	
 	//Different tools defaulting to normal cusor
 	this.cursor = true;
@@ -113,7 +113,7 @@ var Menu = function()
 	//select strikethrough
     this.mouseDownHandler = this.strikethroughDown.bind(this);
 	var selectStrikethrough = document.getElementById("textStrikethrough");
-	selectStrikethrough.addEventListener("mousedown", this.mouseDownHandler, false);
+	selectStrikethrough.addEventListener("mousedown", this.mouseDownHandler, false);*/
 };
 
 

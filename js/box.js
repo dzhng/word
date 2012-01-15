@@ -100,7 +100,7 @@ TextBox.prototype.setChar = function(chars, start, index)
 		if(chars[ch].letter == ' ') {
 
 			// check if the current line needs to be resized
-			var newPos = this.page.checkObsticle(this.x+this.lines[curLine].x, this.y+this.curHeight, 
+			var newPos = this.page.checkObsticle(this.x, this.y+this.curHeight, 
 						this.width, Math.max(this.lines[curLine].height, height));
 			// obsticle found
 			if(newPos != null) {

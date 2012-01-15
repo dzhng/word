@@ -72,7 +72,7 @@ Model.prototype.focus = function()
 Model.prototype.insertPage = function(index)
 {
 	// create a new page that's the same as the template page
-	var page = new settings.template();
+	var page = new settings.template(this);
 	this.pages.splice(index, 0, page);
 
 	console.log("page inserted, total of %d pages", this.pages.length);
