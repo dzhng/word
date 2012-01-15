@@ -6,10 +6,6 @@
 //
 // NOTE:
 
-/************** CONSTNATS *******************/ 
-
-/************** GLOBAL VARIABLES *******************/
-
 /************** OBJECT DECLARATION *******************/
 var TextBox = function(x, y, Width, Height, Page)
 {
@@ -61,21 +57,51 @@ TextBox.prototype.reset = function()
 // the algorithm is keep adding words to the current line, until
 // the line returns a false from either running into obsticles or its full
 // function returns the index where it ends
-TextBox.prototype.setChar = function(chars, index)
+// start: the starting index of the text box
+// index: the current position of new data, everything before this index can be left alone
+TextBox.prototype.setChar = function(chars, start, index)
 {
 	// reset textbox
-	this.reset();
 	var curLine = 0;
+	// counter
+	var ch = start;
+
+	// first check if the index is after this textbox, if it is, we can skip this box
+	var len = this.lines.length;
+	var lastLine = this.lines[len-1];
+	if(lastLine.chars.length > 0) {
+		len = lastLine.chars.length;
+		if(lastLine.chars[len-1].index <= index) {
+			console.log("insert position after box, skipping");
+			return lastLine.chars[lastLine.chars.length-1].index + 1;	
+		}
+	}
+
+	// then check if it's within this box
+	if(index > start) {
+		var newHeight = 0;
+		// iterate through the current lines and find a starting position
+		for(var l = 1; l < this.lines.length; l++) {
+			var line = this.lines[l];
+			newHeight += line.height;
+			if(line.chars[0].index > index) {
+				curLine = l-1;
+				ch = this.lines[curLine].chars[0].index;
+				// delete the rest of the lines, because they're going to be changed
+				this.lines.splice(curLine+1, this.lines.length);
+				this.curHeight = newHeight;
+				console.log("insert position within box, starting at line %d", curLine);
+			}
+		}
+	} else { // not within this box, just get rid of all the lines
+		this.reset();
+	}
 
 	// chars in a word
 	var word = [];
-
 	// word size
 	var width = 0;
 	var height = 0;
-
-	// counter
-	var ch = index;
 
 	while(ch < chars.length) {
 		// set index first so it can be refered back later

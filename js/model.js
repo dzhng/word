@@ -145,7 +145,7 @@ Model.prototype.setText = function(text)
 Model.prototype.insertChar = function(key)
 {
 	if(key != null) {
-		console.profile();
+		//console.profile();
 		this.section.insertChar(key, cursor.index);
 
 		// keep inserting new pages until the char can be inserted
@@ -155,7 +155,7 @@ Model.prototype.insertChar = function(key)
 		}
 
 		this.draw();
-		console.profileEnd();
+		//console.profileEnd();
 	}
 };
 

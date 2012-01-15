@@ -8,10 +8,6 @@
 // NOTE:
 //
 
-/************** CONSTNATS *******************/ 
-
-/************** GLOBAL VARIABLES *******************/
-
 /************** OBJECT DECLARATION *******************/
 var Section = function(model)
 {
@@ -48,7 +44,7 @@ Section.prototype.format = function(index)
 		var boxes = this.model.pages[p].boxes;
 		for(var b = 0; b < boxes.length; b++) {
 			var box = boxes[b];
-			ch = box.setChar(this.chars, ch);
+			ch = box.setChar(this.chars, ch, index);
 		}
 	}
 
