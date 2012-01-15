@@ -18,7 +18,7 @@ var Char = function(letter, style, section)
 	// section this char belong to
 	this.section = section;
 	// letter index in the section
-	this.index = 0;
+	this.index = 9999999;
 
 	// letter width - obtained from lookup table
 	// if it's an unknown letter, set the default size
@@ -47,6 +47,7 @@ Char.prototype.draw = function(context)
 	context.font = this.style.fontString();	
 	context.fillStyle = this.style.color;
 	context.fillText(this.letter, this.x, this.y);
+	//context.fillRect(this.x, this.y, this.width, this.height);
 	context.restore();
 };
 

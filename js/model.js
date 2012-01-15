@@ -19,9 +19,6 @@ var Model = function()
 	this.height = PAGE_SIZE.height;
 	console.log("window width: %d, height: %d", this.width, this.height);
 
-	// make background transparent
-	this.background = "rgba(255, 255, 255, 0)";
-
 	// create a new canvas element per page
 	this.canvas = document.createElement('canvas');
 	document.body.appendChild(this.canvas);
@@ -34,14 +31,16 @@ var Model = function()
 	this.canvas.style.top = 0;
 	this.canvas.style.left = 0;
 	this.context = this.canvas.getContext("2d");
+	settings.mainContext = this.context;
 
 	// clear canvas
-	this.clear();
+	this.context.clearRect(0,0,this.width, this.height);
 	this.menuVisible = false;
 
 	// setup context for drawing
 	this.context.textAlign = "left";
 	this.context.textBaseline = "alphabetic";
+	this.context.fillStyle = settings.background;
 
 	/*** SETUP CONTROLLER ***/
 	// variable deciarations
@@ -63,13 +62,6 @@ var Model = function()
 };
 
 /************** VIEW FUNCTIONS **************/
-Model.prototype.clear = function()
-{
-	// clear the page canvas of all drawn objects
-	this.context.fillStyle = this.background;
-	this.context.clearRect(0,0,this.width, this.height);
-};
-
 Model.prototype.focus = function()
 {
 	this.canvas.focus();
@@ -103,10 +95,8 @@ Model.prototype.changePage = function(index)
 // draw the current page, as well as the 2 adjecent pages
 Model.prototype.draw = function()
 {
-	console.log("draw called");
-
+	//console.log("draw called");
 	this.context.save();
-	this.clear();
 	// redraw the current window
 	this.pages[this.currentPage].draw(this.context);
 	this.context.restore();
@@ -173,7 +163,7 @@ Model.prototype.backspace = function()
 		return;
 	}
 	this.section.chars.splice(--cursor.index, 1);
-	this.section.format();
+	this.section.format(this.cursor.index-1);
 	this.draw();
 };
 

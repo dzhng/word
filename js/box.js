@@ -65,7 +65,7 @@ TextBox.prototype.setChar = function(chars, index)
 {
 	// reset textbox
 	this.reset();
-	var curLine = this.lines.length - 1;
+	var curLine = 0;
 
 	// chars in a word
 	var word = [];
@@ -98,7 +98,8 @@ TextBox.prototype.setChar = function(chars, index)
 				}
 				this.lines[curLine].insertWord(word, width, height);
 			} else {
-				var lheight = this.lines[curLine].align();
+				var lheight = this.lines[curLine].align(this.width, "even");
+
 				// check if the word fits in the box
 				if((this.curHeight + height) > this.height) {
 					// return the beginning of the current line
@@ -168,7 +169,6 @@ TextBox.prototype.draw = function(context)
 
 	// call model draw function, pass it canvas context
 	for(var l=0; l < this.lines.length; l++) {
-		this.lines[l].align(this.width, "even");
 		this.lines[l].draw(context);
 	}
 

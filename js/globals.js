@@ -6,7 +6,7 @@ var PAGE_SIZE = {width: 8.5*PPI, height: 11*PPI};			// size for one page, standa
 /************** GLOBAL VARIABLES *******************/
 // global persistant settings
 // template: template page variable
-var settings = {template: null};
+var settings = {template: null, mainContext: null, bottomContext: null, topContext: null, background:  "rgba(255, 255, 255, 0)"};
 
 // initialize the curser at default position, also keeps track of current page, box..etc
 // index: the index of the cursor in the text, (x,y): location of the cursor on the current page, style: style at the current cursor
