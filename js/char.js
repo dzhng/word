@@ -44,6 +44,7 @@ Char.prototype.setPoint = function(x, y)
 Char.prototype.draw = function(context)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	context.save();
 	context.font = this.style.fontString();	
 	context.fillStyle = this.style.color;
@@ -56,5 +57,13 @@ Char.prototype.draw = function(context)
 	context.fillText(this.letter, this.x, this.y);
 	//context.fillRect(this.x, this.y, this.width, this.height);
 >>>>>>> parent of f893ecb... renamed file
+=======
+	context.save();
+	context.font = this.style.fontString();	
+	context.fillStyle = this.style.color;
+	context.fillText(this.letter, this.x, this.y);
+	//context.fillRect(this.x, this.y, this.width, this.height);
+	context.restore();
+>>>>>>> parent of 7de24c2... a bit more optimized
 };
 
