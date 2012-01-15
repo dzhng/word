@@ -8,6 +8,8 @@ var TextImage = function(x, y, width, height, url)
 	this.height = height + 2*settings.imageBorder;
 
 	this.url = url;
+	this.image = new Image();
+	this.image.src = this.url;
 };
 
 TextImage.prototype = new cObject;
@@ -17,8 +19,11 @@ TextImage.prototype.draw = function(context)
 	context.save();
 
 	context.fillStyle = "rgb(200,0,0)";  
-	context.fillRect(this.x+settings.imageBorder, this.y+settings.imageBorder, 
-			this.width-2*settings.imageBorder, this.height-2*settings.imageBorder);
+	//context.fillRect(this.x+settings.imageBorder, this.y+settings.imageBorder, 
+	//		this.width-2*settings.imageBorder, this.height-2*settings.imageBorder);
+	context.drawImage(this.image,
+				this.x+settings.imageBorder, this.y+settings.imageBorder, 
+				this.width-2*settings.imageBorder, this.height-2*settings.imageBorder);
 
 	context.restore();
 };
