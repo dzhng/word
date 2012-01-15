@@ -26,7 +26,7 @@ var Page = function(model)
 
 	this.dragging = null;	// currently dragging object
 
-//	this.orginOfDrag = null; //is null until mouse interactions begin
+	this.highlightStart = 0;	// highlight start position
 };
 
 Page.prototype = new cObject;
@@ -36,7 +36,7 @@ Page.prototype = new cObject;
 // find the box nearest to the point on the page, looking at boxes' edges
 Page.prototype.getBoxFromPoint = function(x, y)
 {
-	console.log("clicked x:%d, y:%d", x,y);
+	//console.log("clicked x:%d, y:%d", x,y);
 
 	// stores index of closest box
 	var closest = -1;
@@ -70,7 +70,7 @@ Page.prototype.getObjectFromPoint = function(x, y)
 	for(i = 0; i < this.objects.length; i++) {
 		if(this.objects[i].isHovering(x, y)) {
 			this.dragging = this.objects[i];
-			console.log("dragging object %d", i);
+			//console.log("dragging object %d", i);
 			return true;
 		}
 	}
@@ -87,17 +87,25 @@ Page.prototype.updateDrag = function(x, y)
 			var idx = this.boxes[0].lines[0].chars[0].index;
 			this.model.section.format(idx);	// reformat all text starting with the first letter on the page
 		} 
+	} else {
+		this.getBoxFromPoint(x-this.x, y-this.y);
+		// set start highlight index if it's not set
+		// mark highlighted chars
+		var chars = this.model.section.highlight(this.highlightStart, cursor.index);
 	}
 };
 
-Page.prototype.stopDrag = function()
+Page.prototype.stopDrag = function(x, y)
 {
-//	this.originOfDrag = this.dragging;
-//	this.dragging.setPoint(x-this.x-this.dragging.xoff, y-this.y-this.dragging.yoff);
-//	if(this.originOfDrag != this.dragging){
-//
-//	}
-	this.dragging = null;
+	if(this.dragging != null) {
+		// stop dragging any objects
+		this.dragging = null;
+	} else {
+		//console.log("highlighted text from %d to %d", this.highlightStart, cursor.index);
+		if(this.highlightStart == cursor.index) {
+			this.model.section.resetHighlight();
+		}
+	}
 };
 
 Page.prototype.addBox = function(box)
@@ -112,6 +120,13 @@ Page.prototype.addBox = function(box)
 	// add input box to boxes array
 	box.page = this;
 	this.boxes.push(box);
+	// format if there's any text on the page
+	if(this.boxes[0].lines[0].chars[0] != undefined) {
+		var idx = this.boxes[0].lines[0].chars[0].index;
+		this.model.section.format(idx);	// reformat all text starting with the first letter on the page
+	} else {
+		this.model.section.format(0);	// else, format from beginning so we can fill the new box
+	}
 	console.log("box added, total of %d boxes on page", this.boxes.length);
 	console.log("box: (x:%d, y:%d), curHeight: %d" , box.x, box.y, box.curHeight);
 
@@ -122,8 +137,12 @@ Page.prototype.addImage = function(image)
 {
 	image.visible = true;
 	this.objects.push(image);
+	// format if there's any text on the page
+	if(this.boxes[0].lines[0].chars[0] != undefined) {
+		var idx = this.boxes[0].lines[0].chars[0].index;
+		this.model.section.format(idx);	// reformat all text starting with the first letter on the page
+	} 
 	console.log("image: (x:%d, y:%d)" , image.x, image.y);
-
 	return false;
 };
 
@@ -132,7 +151,9 @@ Page.prototype.updateClick = function(x, y)
 	// first see if an object can be selected
 	if(this.getObjectFromPoint(x-this.x, y-this.y) == false) {
 		// find new section and index for cursor
-		return this.getBoxFromPoint(x-this.x, y-this.y);
+		var ret = this.getBoxFromPoint(x-this.x, y-this.y);
+		this.highlightStart = cursor.index;
+		return ret;
 	}
 };
 

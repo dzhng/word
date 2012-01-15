@@ -57,3 +57,27 @@ Section.prototype.format = function(index)
 	}
 };
 
+Section.prototype.resetHighlight = function()
+{
+	// reset the highlight first
+	for(var i = this.chars.length-1; i >= 0; i--) {
+		this.chars[i].highlighted = false;
+	}
+};
+
+// highlight the input chars at start and end index, inclusive
+Section.prototype.highlight = function(start, end)
+{
+	// swap them if end is lower
+	if(end < start) {
+		var tmp = end;
+		end = start;
+		start = tmp;
+	}
+	this.resetHighlight();
+	// highlight selected fonts
+	for(var i = end; i >= start; i--) {
+		this.chars[i].highlighted = true;
+	}
+};
+

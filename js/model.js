@@ -11,7 +11,7 @@
 var Model = function()
 {
 	// set default page template as two columns
-	settings.template = TwoColumns;
+	settings.template = FourBoxes;
 
 	/*** SETUP VIEW ***/
 	// find the correct window size
@@ -108,12 +108,14 @@ Model.prototype.draw = function()
 Model.prototype.insertBox = function(index)
 {
 	this.pages[this.currentPage].addBox(box);
+	this.draw();
 };
 
 // add a new image to the current page
 Model.prototype.insertImage = function(image)
 {
 	this.pages[this.currentPage].addImage(image);
+	this.draw();
 };
 
 // rescale the page to fit on one window
@@ -196,9 +198,9 @@ Model.prototype.updateDrag = function(x, y)
 	this.draw();
 };
 
-Model.prototype.stopDrag = function()
+Model.prototype.stopDrag = function(x, y)
 {
-	this.pages[this.currentPage].stopDrag();
+	this.pages[this.currentPage].stopDrag(x, y);
 	this.draw();
 };
 

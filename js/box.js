@@ -3,6 +3,7 @@
 // Written by: David Zhang
 
 // TODO: 
+// need a minimum box size, and use that as the size to start chopping up word
 //
 // NOTE:
 
@@ -122,27 +123,37 @@ TextBox.prototype.setChar = function(chars, start, index)
 					return idx;
 				}
 				this.lines[curLine].insertWord(word, width, height);
+				// reset word variables
+				width = 0;
+				height = 0;
+				word = [];
 			} else {
-				var lheight = this.lines[curLine].align(lineWidth, "even");
+				// see if there's enough room on the line for just one word
+				if(this.lines[curLine].width == width && width > lineWidth) {
+					ch--;	// cancel out the increment, we want to keep looking for spaces
+					word.splice(word.length-1,1);
+					this.curHeight += height;	// move down a bit so we can check for space on next iteration
+				} else {
+					var lheight = this.lines[curLine].align(lineWidth, "even");
+					// check if the word fits in the box
+					if((this.curHeight + height) > this.height) {
+						// return the beginning of the current line
+						return word[0].index;
+					}
+					this.curHeight += lheight;
 
-				// check if the word fits in the box
-				if((this.curHeight + height) > this.height) {
-					// return the beginning of the current line
-					return word[0].index;
+					// add new line
+					var line = new TextLine();
+					line.setPoint(0, this.curHeight);
+					this.lines.push(line);
+
+					this.lines[++curLine].insertWord(word, width, height);
+					// reset word variables
+					width = 0;
+					height = 0;
+					word = [];
 				}
-				this.curHeight += lheight;
-
-				// add new line
-				var line = new TextLine();
-				line.setPoint(0, this.curHeight);
-				this.lines.push(line);
-
-				this.lines[++curLine].insertWord(word, width, height);
 			}
-			// reset word variables
-			width = 0;
-			height = 0;
-			word = [];
 		}
 		ch++;
 	}

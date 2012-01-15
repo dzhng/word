@@ -61,7 +61,7 @@ Controller.prototype.mouseDown = function(e)
 Controller.prototype.mouseUp = function(e)
 {
 	this.click = false;
-	this.model.stopDrag();
+	this.model.stopDrag(this.pX, this.pY);
 };
 
 Controller.prototype.mouseMove = function(e)

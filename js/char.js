@@ -45,7 +45,12 @@ Char.prototype.draw = function(context)
 {
 	//context.font = this.style.fontString;
 	//context.fillStyle = this.style.color;
+	if(this.highlighted) {
+		context.save();
+		context.fillStyle = settings.highlightColor;
+		context.fillRect(this.x, this.y, this.width, this.height);
+		context.restore();
+	}
 	context.fillText(this.letter, this.x, this.y);
-	//context.fillRect(this.x, this.y, this.width, this.height);
 };
 

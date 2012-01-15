@@ -2,8 +2,10 @@
 var TextImage = function(x, y, width, height, url)
 {
 	this.setPoint(x, y);
-	this.width = width;
-	this.height = height;
+
+	// add the border
+	this.width = width + 2*settings.imageBorder;
+	this.height = height + 2*settings.imageBorder;
 
 	this.url = url;
 };
@@ -15,7 +17,8 @@ TextImage.prototype.draw = function(context)
 	context.save();
 
 	context.fillStyle = "rgb(200,0,0)";  
-	context.fillRect(this.x, this.y, this.width, this.height);
+	context.fillRect(this.x+settings.imageBorder, this.y+settings.imageBorder, 
+			this.width-2*settings.imageBorder, this.height-2*settings.imageBorder);
 
 	context.restore();
 };
