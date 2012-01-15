@@ -26,7 +26,8 @@
         <script type="text/javascript" src="js/line.js"></script>
         <script type="text/javascript" src="js/function.js"></script>
         <script type="text/javascript" src="js/model.js"></script>
-        <script type="text/javascript">
+		<script type="text/javascript" src="js/menu.js"></script>
+		<script type="text/javascript">
             function document_load() {	// Setup editor
                 var editor = new Model();
 
@@ -54,7 +55,7 @@
 		</div>
 		<!-- Left Sidebar contains tool for utilizing while constructing contents on a page-->
 		<div id="leftSidebar">
-			<div id="pointerButton" class="docButton" >
+			<div id="pointerButton" class="docButton" aria-disabled="false" aria-pressed="false" role="button" aria-label="Cursor" >
 				<div id="pointerButtonBg"class="menuButtonBg"></div>	
 			</div>
 

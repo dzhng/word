@@ -21,6 +21,7 @@ var Controller = function(model)
 	this.pY = 0;
     
     // add input event listeners
+	
     this.mouseDownHandler = this.mouseDown.bind(this);
     this.model.canvas.addEventListener("mousedown", this.mouseDownHandler, false);
     
