@@ -46,6 +46,7 @@ var Model = function()
 	// variable deciarations
 	this.controller = new Controller(this);								// user input controller
 	this.section = new Section(this);									// section object stores all chars in the document
+	this.menu = new Menu();												// option selection menu
 	this.pages = [];													// array to store all currently viewable window
 	this.currentPage = 0;												// currently viewed page, the page to draw
 	

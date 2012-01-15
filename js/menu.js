@@ -25,15 +25,13 @@ var Menu = function()
 	
     this.mouseDownHandler = this.mouseDown.bind(this);
 	var testing = document.getElementById("pointerButton");
-	this.testing.addEventListener("mousedown", this.mouseDownHandler, false);
-
+	testing.addEventListener("mousedown", this.mouseDownHandler, false);
 };
 
 Menu.prototype.mouseDown = function(e)
 {
-		this.pX = e.pageX;
-		this.pY = e.pageY;
-		this.click = true;
-		this.model.updateClick(this.pX, this.pY);
-		console.log('something funny');
+	this.pX = e.pageX;
+	this.pY = e.pageY;
+	console.log('something funny');
 };
+
