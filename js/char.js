@@ -18,7 +18,7 @@ var Char = function(letter, style, section)
 	// section this char belong to
 	this.section = section;
 	// letter index in the section
-	this.index = 9999999;
+	this.index = MAX_IDX;
 
 	// letter width - obtained from lookup table
 	// if it's an unknown letter, set the default size

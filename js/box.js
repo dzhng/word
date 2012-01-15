@@ -66,32 +66,31 @@ TextBox.prototype.setChar = function(chars, start, index)
 	// counter
 	var ch = start;
 
-	// first check if the index is after this textbox, if it is, we can skip this box
-	var len = this.lines.length;
-	var lastLine = this.lines[len-1];
-	if(lastLine.chars.length > 0) {
-		len = lastLine.chars.length;
-		if(lastLine.chars[len-1].index <= index) {
-			console.log("insert position after box, skipping");
-			return lastLine.chars[lastLine.chars.length-1].index + 1;	
-		}
-	}
-
 	// then check if it's within this box
-	if(index > start) {
-		var newHeight = 0;
+	var firstLine = this.lines[0];
+	if(this.lines.length > 1 && firstLine.chars.length > 0 && firstLine.chars[0].index == start && index > start) {
+		var newHeight = this.lines[0].height;
 		// iterate through the current lines and find a starting position
 		for(var l = 1; l < this.lines.length; l++) {
 			var line = this.lines[l];
 			newHeight += line.height;
-			if(line.chars[0].index > index) {
+			if(line.chars[0].index > index && line.chars[0].index != MAX_IDX) {
 				curLine = l-1;
 				ch = this.lines[curLine].chars[0].index;
 				// delete the rest of the lines, because they're going to be changed
 				this.lines.splice(curLine+1, this.lines.length);
 				this.curHeight = newHeight;
 				console.log("insert position within box, starting at line %d", curLine);
+				break;
 			}
+		}
+		// if still didnt find any lines, then the index must be after this textbox
+		// just start working from the last line
+		if(curLine == 0) {
+			var line = this.lines.pop();
+			this.curHeight = newHeight - line.height;
+			ch = line.chars[0].index;
+			curLine = this.lines.length-1;
 		}
 	} else { // not within this box, just get rid of all the lines
 		this.reset();
@@ -192,6 +191,9 @@ TextBox.prototype.draw = function(context)
 
 	context.save();
 	context.translate(this.x, this.y);	// all object points are relative to the parent
+
+	context.font = cursor.style.fontString;
+	context.fillStyle = cursor.style.color;
 
 	// call model draw function, pass it canvas context
 	for(var l=0; l < this.lines.length; l++) {

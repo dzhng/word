@@ -96,6 +96,7 @@ Model.prototype.changePage = function(index)
 Model.prototype.draw = function()
 {
 	//console.log("draw called");
+	this.context.clearRect(0,0,this.width, this.height);
 	this.context.save();
 	// redraw the current window
 	this.pages[this.currentPage].draw(this.context);

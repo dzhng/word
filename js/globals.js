@@ -2,6 +2,7 @@
 /************** GOLBAL CONSTNATS *******************/ 
 var PPI = 72;												// pixel per inch to calibrate everything to
 var PAGE_SIZE = {width: 8.5*PPI, height: 11*PPI};			// size for one page, standard paper size, in inches
+var MAX_IDX = 9999999;										// max index for chars in section
 
 /************** GLOBAL VARIABLES *******************/
 // global persistant settings
