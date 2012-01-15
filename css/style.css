@@ -224,3 +224,20 @@ body    {
 	height:20px;
 	background-position:2px -427px;
 }
+
+#dropDownSizes{
+	position: absolute;
+	display:none;
+	height:200px;
+	width:135px;
+	top:75px;
+	left:78px;
+	background:WhiteSmoke;
+	border:3px solid #7E807F;
+	z-index:1000;	
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px; /* future proofing */
+	-khtml-border-radius: 3px; /* for old Konqueror browsers */
+
+}

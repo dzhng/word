@@ -1,5 +1,9 @@
 var Menu = function()
 {
+
+	
+	this.toggleFontSizeMenu = false //starts not visible
+
 	/*//Set the different variables in the Menu
 	
 	//Different tools defaulting to normal cusor
@@ -114,7 +118,33 @@ var Menu = function()
     this.mouseDownHandler = this.strikethroughDown.bind(this);
 	var selectStrikethrough = document.getElementById("textStrikethrough");
 	selectStrikethrough.addEventListener("mousedown", this.mouseDownHandler, false);*/
+
+	//fontSize event handler
+	this.mouseDownHandler = this.toggleNavMenu.bind(this);
+	var fontSizeClick = document.getElementById("fontSize");
+	fontSizeClick.addEventListener("mousedown", this.mouseDownHandler, false);
+
 };
+
+
+Menu.prototype.toggleNavMenu = function(e)
+{
+	this.dropdown = document.getElementById("dropDownSizes");
+	
+	if(!this.toggleFontSizeMenu){
+		this.toggleFontSizeMenu = true;
+		this.dropdown.style.display = "block";
+	}
+	else{
+		this.toggleFontSizeMenu = false;
+		this.dropdown.style.display = "none";
+	};
+
+	
+
+};
+
+
 
 
 Menu.prototype.cursorDown = function(e)
