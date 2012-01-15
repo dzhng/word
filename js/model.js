@@ -135,7 +135,7 @@ Model.prototype.setText = function(text)
 		// keep inserting new pages until the char can be inserted
 		while(this.section.format(cursor.index-1) === false) {
 			this.insertPage(this.pages.length);
-			this.changePage(this.pages.length-1);
+			//this.changePage(this.pages.length-1);
 		}
 	}
 	this.draw();
@@ -151,7 +151,7 @@ Model.prototype.insertChar = function(key)
 		// keep inserting new pages until the char can be inserted
 		while(this.section.format(cursor.index-1) === false) {
 			this.insertPage(this.pages.length);
-			this.changePage(this.pages.length-1);
+			//this.changePage(this.pages.length-1);
 		}
 
 		this.draw();

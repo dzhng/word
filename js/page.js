@@ -129,10 +129,28 @@ Page.prototype.updateClick = function(x, y)
 	}
 };
 
+// check for obsticles and returns an x offset and width offset
 Page.prototype.checkObsticle = function(x, y, width, height)
 {
 	// iterate through upper layers and see if there's anything in the way
-	return true;
+	for(var i = 0; i < this.objects.length; i++) {
+		var obj = this.objects[i];
+		// check for y axis intersecting
+		if((y > obj.y && y < obj.y+obj.height) || (y+height > obj.y && y+height < obj.y+obj.height) ||
+			(y > obj.y && y+height < obj.y+obj.height) || (y < obj.y && y+height > obj.y+obj.height)) {
+			// TODO: object is in between the lines
+			// check if object is on left or right
+			if((obj.x > x) && (obj.x < x+width)) {
+				// object is on right side, modify the width so its shorter
+				return {nX: x, nWidth: obj.x-x};
+			} else if((obj.x+obj.width > x) && (obj.x+obj.width < x+width)) {
+				// object is on the left side, shift x value right and change width so its shorter
+				console.log("width: %d", (x+width - (obj.x+obj.width)));
+				return {nX: (obj.x+obj.width), nWidth: (x+width - (obj.x+obj.width))};
+			}
+		}
+	}
+	return null;
 };
 
 Page.prototype.draw = function(context)

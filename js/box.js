@@ -36,21 +36,15 @@ var TextBox = function(x, y, Width, Height, Page)
 TextBox.prototype = new cObject;
 
 /************** BUILTIN FUNCTIONS *******************/
-// add the line to the box, returns the height of space left
-TextBox.prototype.newLine = function()
-{
-	var line = new TextLine();
-	line.setPoint(0, this.curHeight);
-	this.lines.push(line);
-	//console.log("new line added, total lines: %d", this.lines.length);
-	return true;
-};
-
 TextBox.prototype.reset = function()
 {
 	this.lines = [];	// empty current line array
 	this.curHeight = 0;	// reset current line height
-	this.newLine();
+
+	// add new line
+	var line = new TextLine();
+	line.setPoint(0, this.curHeight);
+	this.lines.push(line);
 };
 
 // add word to current textbox, return true on success, false on fail
@@ -71,6 +65,8 @@ TextBox.prototype.setChar = function(chars, start, index)
 	// word size
 	var width = 0;
 	var height = 0;
+	// length of current line
+	var lineWidth = 0;
 
 	// then check if it's within this box
 	/*if(this.lines[0].chars[0] != undefined && this.lines[0].chars[0].index == start) {
@@ -102,8 +98,21 @@ TextBox.prototype.setChar = function(chars, start, index)
 		height = Math.max(chars[ch].height, height);
 		// if space encountered, word found
 		if(chars[ch].letter == ' ') {
+
+			// check if the current line needs to be resized
+			var newPos = this.page.checkObsticle(this.x+this.lines[curLine].x, this.y+this.curHeight, 
+						this.width, Math.max(this.lines[curLine].height, height));
+			// obsticle found
+			if(newPos != null) {
+				//console.log("obsticle found");
+				this.lines[curLine].x = newPos.nX - this.x;
+				lineWidth = newPos.nWidth;
+			} else {
+				lineWidth = this.width;
+			}
+
 			// if can't add to this line, make a new line
-			if(this.lines[curLine].width + width < this.width) {
+			if(this.lines[curLine].width + width < lineWidth) {
 				// check if this word will fit
 				if((this.curHeight + height) > this.height) {
 					// return the beginning of the current line
@@ -114,7 +123,7 @@ TextBox.prototype.setChar = function(chars, start, index)
 				}
 				this.lines[curLine].insertWord(word, width, height);
 			} else {
-				var lheight = this.lines[curLine].align(this.width, "even");
+				var lheight = this.lines[curLine].align(lineWidth, "even");
 
 				// check if the word fits in the box
 				if((this.curHeight + height) > this.height) {
@@ -122,7 +131,12 @@ TextBox.prototype.setChar = function(chars, start, index)
 					return word[0].index;
 				}
 				this.curHeight += lheight;
-				this.newLine();
+
+				// add new line
+				var line = new TextLine();
+				line.setPoint(0, this.curHeight);
+				this.lines.push(line);
+
 				this.lines[++curLine].insertWord(word, width, height);
 			}
 			// reset word variables
@@ -133,15 +147,6 @@ TextBox.prototype.setChar = function(chars, start, index)
 		ch++;
 	}
 	return ch;
-
-	// see if there are any obsticles in the way, if so, make a new line
-	/*if(this.page.checkObsticle(this.x, this.y, 
-				this.lines[curLine].width + width, 
-				Math.max(this.lines[curLine].height, height)) === false) {
-		this.lines[curLine].align();
-		this.curHeight += this.lines[curLine].height;
-		this.newLine();
-	}*/
 };
 
 TextBox.prototype.getLocationFromPoint = function(x, y)
