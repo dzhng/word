@@ -23,6 +23,8 @@ var Page = function()
 	this.objects = [];
 
 	this.dragging = null;	// currently dragging object
+
+//	this.orginOfDrag = null; //is null until mouse interactions begin
 };
 
 Page.prototype = new cObject;
@@ -83,6 +85,11 @@ Page.prototype.updateDrag = function(x, y)
 
 Page.prototype.stopDrag = function()
 {
+//	this.originOfDrag = this.dragging;
+//	this.dragging.setPoint(x-this.x-this.dragging.xoff, y-this.y-this.dragging.yoff);
+//	if(this.originOfDrag != this.dragging){
+//
+//	}
 	this.dragging = null;
 };
 
