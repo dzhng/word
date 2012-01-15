@@ -43,11 +43,9 @@ Char.prototype.setPoint = function(x, y)
 
 Char.prototype.draw = function(context)
 {
-	context.save();
-	context.font = this.style.fontString();	
-	context.fillStyle = this.style.color;
+	//context.font = this.style.fontString;
+	//context.fillStyle = this.style.color;
 	context.fillText(this.letter, this.x, this.y);
 	//context.fillRect(this.x, this.y, this.width, this.height);
-	context.restore();
 };
 
