@@ -66,41 +66,32 @@ TextBox.prototype.setChar = function(chars, start, index)
 	// counter
 	var ch = start;
 
-	// then check if it's within this box
-	var firstLine = this.lines[0];
-	if(this.lines.length > 1 && firstLine.chars.length > 0 && firstLine.chars[0].index == start && index > start) {
-		var newHeight = this.lines[0].height;
-		// iterate through the current lines and find a starting position
-		for(var l = 1; l < this.lines.length; l++) {
-			var line = this.lines[l];
-			newHeight += line.height;
-			if(line.chars[0].index > index && line.chars[0].index != MAX_IDX) {
-				curLine = l-1;
-				ch = this.lines[curLine].chars[0].index;
-				// delete the rest of the lines, because they're going to be changed
-				this.lines.splice(curLine+1, this.lines.length);
-				this.curHeight = newHeight;
-				console.log("insert position within box, starting at line %d", curLine);
-				break;
-			}
-		}
-		// if still didnt find any lines, then the index must be after this textbox
-		// just start working from the last line
-		if(curLine == 0) {
-			var line = this.lines.pop();
-			this.curHeight = newHeight - line.height;
-			ch = line.chars[0].index;
-			curLine = this.lines.length-1;
-		}
-	} else { // not within this box, just get rid of all the lines
-		this.reset();
-	}
-
 	// chars in a word
 	var word = [];
 	// word size
 	var width = 0;
 	var height = 0;
+
+	// then check if it's within this box
+	/*if(this.lines[0].chars[0] != undefined && this.lines[0].chars[0].index == start) {
+		for(var l = this.lines.length-1; l >= 0; l--) {
+			// remove a line on every iteration until we find one that goes under the index
+			var line = this.lines.pop();
+			// reduce the current box height as we remove lines
+			this.curHeight -= line.height;
+			// check if this line is the first one to go under the index
+			if(line.chars[0].index < index) {
+				ch = line.chars[0].index;
+				curLine = l;
+				this.newLine();
+				//console.log("insert position within box, starting at line %d", curLine);
+				break;
+			}
+		}
+	} else { // not within this box, just get rid of all the lines
+		this.reset();
+	}*/
+	this.reset();
 
 	while(ch < chars.length) {
 		// set index first so it can be refered back later
