@@ -69,26 +69,7 @@ TextBox.prototype.setChar = function(chars, start, index)
 	// length of current line
 	var lineWidth = 0;
 
-	// TODO: then check if it's within this box
-	/*if(this.lines[0].chars[0] != undefined && this.lines[0].chars[0].index == start) {
-		for(var l = this.lines.length-1; l >= 0; l--) {
-			// remove a line on every iteration until we find one that goes under the index
-			var line = this.lines.pop();
-			// reduce the current box height as we remove lines
-			this.curHeight -= line.height;
-			// check if this line is the first one to go under the index
-			if(line.chars[0].index < index) {
-				ch = line.chars[0].index;
-				curLine = l;
-				this.newLine();
-				//console.log("insert position within box, starting at line %d", curLine);
-				break;
-			}
-		}
-	} else { // not within this box, just get rid of all the lines
-		this.reset();
-	}*/
-	this.reset();
+	this.reset();	// reset the box at the beginning means format this box from scratch
 
 	while(ch < chars.length) {
 		// set index first so it can be refered back later
