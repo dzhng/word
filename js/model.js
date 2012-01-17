@@ -169,7 +169,7 @@ Model.prototype.backspace = function()
 		return;
 	}
 	this.section.chars.splice(--cursor.index, 1);
-	this.section.format(this.cursor.index-1);
+	this.section.format(cursor.index-1);
 	this.draw();
 };
 
