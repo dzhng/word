@@ -173,19 +173,33 @@ TextBox.prototype.getLocationFromPoint = function(x, y)
 	return true;
 };
 
-TextBox.prototype.draw = function(context)
+TextBox.prototype.drawText = function()
 {
-	//console.log("drawing %d lines", this.lines.length);
+	var context = layers.mainContext;
 
 	context.save();
 	context.translate(this.x, this.y);	// all object points are relative to the parent
 
-	context.font = cursor.style.fontString;
-	context.fillStyle = cursor.style.color;
+	//console.log("box draw text called");
+	// call model draw function, pass it canvas context
+	for(var l=0; l < this.lines.length; l++) {
+		this.lines[l].drawText();
+	}
+
+	// restore canvas back to orginal settings
+	context.restore();
+};
+
+TextBox.prototype.drawMarkup = function()
+{
+	var context = layers.markupLowContext;
+
+	context.save();
+	context.translate(this.x, this.y);	// all object points are relative to the parent
 
 	// call model draw function, pass it canvas context
 	for(var l=0; l < this.lines.length; l++) {
-		this.lines[l].draw(context);
+		this.lines[l].drawMarkup();
 	}
 
 	// restore canvas back to orginal settings

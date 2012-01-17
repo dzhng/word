@@ -86,12 +86,14 @@ Page.prototype.updateDrag = function(x, y)
 		if(this.boxes[0].lines[0].chars[0] != undefined) {
 			var idx = this.boxes[0].lines[0].chars[0].index;
 			this.model.section.format(idx);	// reformat all text starting with the first letter on the page
+			this.drawMain();
 		} 
 	} else {
 		this.getBoxFromPoint(x-this.x, y-this.y);
 		// set start highlight index if it's not set
 		// mark highlighted chars
 		var chars = this.model.section.highlight(this.highlightStart, cursor.index);
+		this.drawMarkup();
 	}
 };
 
@@ -104,6 +106,7 @@ Page.prototype.stopDrag = function(x, y)
 		//console.log("highlighted text from %d to %d", this.highlightStart, cursor.index);
 		if(this.highlightStart == cursor.index) {
 			this.model.section.resetHighlight();
+			this.drawMarkup();
 		}
 	}
 };
@@ -127,6 +130,7 @@ Page.prototype.addBox = function(box)
 	} else {
 		this.model.section.format(0);	// else, format from beginning so we can fill the new box
 	}
+	this.drawMain();
 	console.log("box added, total of %d boxes on page", this.boxes.length);
 	console.log("box: (x:%d, y:%d), curHeight: %d" , box.x, box.y, box.curHeight);
 
@@ -142,6 +146,7 @@ Page.prototype.addImage = function(image)
 		var idx = this.boxes[0].lines[0].chars[0].index;
 		this.model.section.format(idx);	// reformat all text starting with the first letter on the page
 	} 
+	this.drawMain();
 	console.log("image: (x:%d, y:%d)" , image.x, image.y);
 	return false;
 };
@@ -151,10 +156,16 @@ Page.prototype.updateClick = function(x, y)
 	// first see if an object can be selected
 	if(this.getObjectFromPoint(x-this.x, y-this.y) == false) {
 		// find new section and index for cursor
-		var ret = this.getBoxFromPoint(x-this.x, y-this.y);
-		this.highlightStart = cursor.index;
-		return ret;
+		if(this.getBoxFromPoint(x-this.x, y-this.y)) {
+			this.highlightStart = cursor.index;
+			this.drawMarkup();	// draw the cursor
+			return true;
+		}
+	} else {
+		this.model.section.resetHighlight();
+		this.drawMarkup();
 	}
+	return false;
 };
 
 // check for obsticles and returns an x offset and width offset
@@ -181,27 +192,50 @@ Page.prototype.checkObsticle = function(x, y, width, height)
 	return null;
 };
 
-Page.prototype.draw = function(context)
+Page.prototype.drawBackground = function()
 {
-	// don't draw if not visible
-	if(!this.visible) {
-		return;
-	}
+	var context = layers.bottomContext;
+
+	context.save();
+	context.fillStyle = this.background;
+	context.fillRect(this.x,this.y,this.width, this.height);
+	context.restore();
+};
+
+Page.prototype.drawMain = function()
+{
+	var context = layers.mainContext;
 
 	context.save();
 	context.translate(this.x, this.y);
 
-	context.fillStyle = this.background;
-	context.fillRect(0,0,this.width, this.height);
+	context.clearRect(0,0,this.width, this.height);
 
 	// update all objects on page
 	for(var i = 0; i < this.objects.length; i++) {
-		this.objects[i].draw(context);
+		this.objects[i].draw();
 	}
 
 	// update all the textboxes on page
 	for(var i = 0; i < this.boxes.length; i++) {
-		this.boxes[i].draw(context);
+		this.boxes[i].drawText();
+	}
+	context.restore();
+};
+
+Page.prototype.drawMarkup = function()
+{
+	var context = layers.markupLowContext;
+
+	context.save();
+	context.translate(this.x, this.y);
+
+	context.clearRect(0,0,this.width, this.height);
+	context.fillStyle = settings.highlightColor;
+
+	// draw the highlights
+	for(var i = 0; i < this.boxes.length; i++) {
+		this.boxes[i].drawMarkup();
 	}
 	context.restore();
 };

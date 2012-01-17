@@ -14,17 +14,17 @@ var TextImage = function(x, y, width, height, url)
 
 TextImage.prototype = new cObject;
 
-TextImage.prototype.draw = function(context)
+TextImage.prototype.draw = function()
 {
-	context.save();
+	var context = layers.mainContext;
 
+	context.save();
 	context.fillStyle = "rgb(200,0,0)";  
 	//context.fillRect(this.x+settings.imageBorder, this.y+settings.imageBorder, 
 	//		this.width-2*settings.imageBorder, this.height-2*settings.imageBorder);
 	context.drawImage(this.image,
 				this.x+settings.imageBorder, this.y+settings.imageBorder, 
 				this.width-2*settings.imageBorder, this.height-2*settings.imageBorder);
-
 	context.restore();
 };
 

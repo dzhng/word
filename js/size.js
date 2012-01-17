@@ -21,7 +21,7 @@ for (var f=0; f < FONTS.length; f++) {
 			var fontStr = STYLE[s] + " 72px " + FONTS[f];
 			var text = CHARS[i]+CHARS[i]+CHARS[i]+CHARS[i]+CHARS[i];
 			context.font = fontStr;
-			letterWidth[FONTS[f]][STYLE[s]][CHARS[i]] = context.measureText(text).width/5;
+			letterWidth[FONTS[f]][STYLE[s]][CHARS[i]] = Math.round(context.measureText(text).width/5);
 		}
 	}
 }

@@ -101,13 +101,38 @@ TextLine.prototype.align = function(len, alignment)
 };
 
 // draw all the chars in the line
-TextLine.prototype.draw = function(context)
+TextLine.prototype.drawText = function()
 {
+	var context = layers.mainContext;
+
+	for(var i = 0; i < this.chars.length; i++) {
+		var ch = this.chars[i];
+
+		// see if letter style has changed, if so, reset canvas state machine
+		// and change cursor style
+		if(ch.style.fontString != cursor.style.fontString ||
+				ch.style.color != cursor.style.color) {
+			context.font = ch.style.fontString;
+			context.fillStyle = ch.style.color;
+			cursor.style = new ch.style;
+		}
+		context.fillText(ch.letter, ch.x + this.x, ch.y + this.y);
+	}
+};
+
+// draw all markups in the line
+TextLine.prototype.drawMarkup = function()
+{
+	var context = layers.markupLowContext;
+
 	context.save();
 	context.translate(this.x, this.y);	// all points are relative to the parent object
 	
 	for(var i = 0; i < this.chars.length; i++) {
-		this.chars[i].draw(context);
+		var ch = this.chars[i];
+		if(ch.highlighted) {
+			context.fillRect(ch.x, 0, ch.width, this.height);
+		}
 	}
 
 	context.restore();

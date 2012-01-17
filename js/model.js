@@ -15,32 +15,8 @@ var Model = function()
 
 	/*** SETUP VIEW ***/
 	// find the correct window size
-	this.width = window.innerWidth;
-	this.height = PAGE_SIZE.height;
-	console.log("window width: %d, height: %d", this.width, this.height);
 
-	// create a new canvas element per page
-	this.canvas = document.createElement('canvas');
-	document.body.appendChild(this.canvas);
-	this.canvas.height = this.height;
-	this.canvas.width = this.width;
-	this.canvas.border = "0 px";
-	this.canvas.tabIndex = 1;			// make canvas focusable
-	this.canvas.style.visibility = "visible";
-	this.canvas.style.position = "absolute";
-	this.canvas.style.top = 0;
-	this.canvas.style.left = 0;
-	this.context = this.canvas.getContext("2d");
-	settings.mainContext = this.context;
-
-	// clear canvas
-	this.context.clearRect(0,0,this.width, this.height);
 	this.menuVisible = false;
-
-	// setup context for drawing
-	this.context.textAlign = "left";
-	this.context.textBaseline = "alphabetic";
-	this.context.fillStyle = settings.background;
 
 	/*** SETUP CONTROLLER ***/
 	// variable deciarations
@@ -65,7 +41,7 @@ var Model = function()
 /************** VIEW FUNCTIONS **************/
 Model.prototype.focus = function()
 {
-	this.canvas.focus();
+	layers.topContext.canvas.focus();
 };
 
 /************** BUILTIN FUNCTIONS *******************/
@@ -87,45 +63,43 @@ Model.prototype.changePage = function(index)
 	this.currentPage = index;
 	// make current page in middle of screen, draw left page and right page
 	var page = this.pages[this.currentPage];
-	page.x = this.width/2 - page.width/2;
+	page.x = settings.width/2 - page.width/2;
 	page.visible = true;
-
-	this.draw();
 };
 
-// draw the current page, as well as the 2 adjecent pages
+// redraw the current page, as well as the 2 adjecent pages
 Model.prototype.draw = function()
 {
-	//console.log("draw called");
-	this.context.clearRect(0,0,this.width, this.height);
-	this.context.save();
 	// redraw the current window
-	this.pages[this.currentPage].draw(this.context);
-	this.context.restore();
+	this.pages[this.currentPage].drawBackground();
+	this.pages[this.currentPage].drawMain();
+	this.pages[this.currentPage].drawMarkup();
 };
 
 // add a box to continue the current page
 Model.prototype.insertBox = function(index)
 {
 	this.pages[this.currentPage].addBox(box);
-	this.draw();
 };
 
 // add a new image to the current page
 Model.prototype.insertImage = function(image)
 {
 	this.pages[this.currentPage].addImage(image);
-	this.draw();
 };
 
 // rescale the page to fit on one window
 Model.prototype.updateSize = function() 
 {
 	// find the maximum size of the canavs that would fit on the page
-	this.width = window.innerWidth;
-	this.height = PAGE_SIZE.height;
-	this.canvas.height = this.height;
-	this.canvas.width = this.width;
+	settings.width = window.innerWidth;
+	settings.height = PAGE_SIZE.height;
+
+	for(context in layers) {
+		layers[context].canvas.height = settings.height;
+		layers[context].canvas.width = settings.width;
+	}
+
 	this.changePage(this.currentPage);
 	this.draw();
 };
@@ -147,7 +121,7 @@ Model.prototype.setText = function(text)
 Model.prototype.insertChar = function(key)
 {
 	if(key != null) {
-		//console.profile();
+		console.profile();
 		this.section.insertChar(key, cursor.index);
 
 		// keep inserting new pages until the char can be inserted
@@ -156,8 +130,9 @@ Model.prototype.insertChar = function(key)
 			//this.changePage(this.pages.length-1);
 		}
 
-		this.draw();
-		//console.profileEnd();
+		this.pages[this.currentPage].drawMarkup();
+		this.pages[this.currentPage].drawMain();
+		console.profileEnd();
 	}
 };
 
@@ -171,6 +146,7 @@ Model.prototype.backspace = function()
 	this.section.chars.splice(--cursor.index, 1);
 	this.section.format(cursor.index-1);
 	this.draw();
+	//TODO: Delete all highlighted characters
 };
 
 /************** MOUSE HANDLERS *******************/
@@ -183,7 +159,6 @@ Model.prototype.updateClick = function(x, y)
 		if(this.pages[this.currentPage].updateClick(x, y) == false) {
 			cursor.index = this.section.chars.length;
 		}
-		this.draw();
 	} else {
 		// if nothing else is clicked, toggle menu visibility
 		this.menuVisible = !this.menuVisible;
@@ -195,13 +170,11 @@ Model.prototype.updateClick = function(x, y)
 Model.prototype.updateDrag = function(x, y)
 {
 	this.pages[this.currentPage].updateDrag(x, y);
-	this.draw();
 };
 
 Model.prototype.stopDrag = function(x, y)
 {
 	this.pages[this.currentPage].stopDrag(x, y);
-	this.draw();
 };
 
 // called when mouse moves
