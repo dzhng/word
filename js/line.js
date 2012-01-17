@@ -48,7 +48,7 @@ TextLine.prototype.getPositionFromPoint = function(x)
 			break;
 		}
 	}
-	console.log("char %d selected", w);
+	//console.log("char %d selected", w);
 
 	if(w == this.chars.length) {
 		return this.chars[w-1].index + 1;

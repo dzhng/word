@@ -183,7 +183,7 @@ TextBox.prototype.getLocationFromPoint = function(x, y)
 	if(c == this.lines.length) {
 		c = this.lines.length-1;
 	}
-	console.log("line %d selected, x: %d, y: %d", c, x, y);
+	//console.log("line %d selected, x: %d, y: %d", c, x, y);
 	// now get the letter within the line
 	var idx = this.lines[c].getPositionFromPoint(x-this.lines[c].x);
 	

@@ -59,7 +59,7 @@ Page.prototype.getBoxFromPoint = function(x, y)
 			return false;
 		}
 	}
-	console.log("box %d selected", closest);
+	//console.log("box %d selected", closest);
 	// convert point to box coordinate space and update cursor location
 	return this.boxes[closest].getLocationFromPoint(x - this.boxes[closest].x, y - this.boxes[closest].y);
 };
