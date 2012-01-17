@@ -69,7 +69,7 @@ TextBox.prototype.setChar = function(chars, start, index)
 	// length of current line
 	var lineWidth = 0;
 
-	// then check if it's within this box
+	// TODO: then check if it's within this box
 	/*if(this.lines[0].chars[0] != undefined && this.lines[0].chars[0].index == start) {
 		for(var l = this.lines.length-1; l >= 0; l--) {
 			// remove a line on every iteration until we find one that goes under the index
