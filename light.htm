@@ -26,15 +26,14 @@
         <script type="text/javascript" src="js/line.js"></script>
         <script type="text/javascript" src="js/function.js"></script>
         <script type="text/javascript" src="js/model.js"></script>
-        <script type="text/javascript">
+		<script type="text/javascript" src="js/menu.js"></script>
+		<script type="text/javascript">
             function document_load() {	// Setup editor
+				setupLayers();
                 var editor = new Model();
 
-				editor.setText(
-						"I loved talking to the skankiest prostitutes at three in the morning with a camera crew around me, fires burning in the street, sad, abused people clinging to scraps of life for their pleasures, bailed out prisoners and the drug dealers waiting for them to be released, homeless addicts with nowhere to go and they only weren’t freaks if you saw them at three in the morning. In short,  I loved my job. Entrepreneurship ruined it. I’m not like how Mark Zuckerberg describes himself: 'a builder'. My guess is, I’m not like most of the smart people who read this blog who go out there and build things to improve the lives of others. And yet, I kept doing it to myself over and over again. Once you enter the world of 'eat what you kill' you can’t go back to being spoon-fed by the pencil factory anymore. Sadly. I write about my first job here (and the prostitutes). I had a regular job at HBO. My title: Junior Programmer Analyst in the IT department. I told HBO, 'you do original TV programming so why not do original web programming.' And magically, from 1996-98, they let me do whatever I wanted to do at three in the morning and then put it on their website.  My original job was to do some Unix/ Oracle thing that I was totally unqualified for and didn’t know how to do. So I figured out a more fun idea for myself and persuaded them to let me do it."
-				);
-
-				editor.insertImage(new TextImage(200, 200, 200, 200, ""));
+				editor.insertImage(new TextImage(200, 200, 180, 180, "images/10.png"));
+				editor.insertImage(new TextImage(400, 400, 180, 180, "images/11.png"));
             }
 		</script>
         
@@ -66,9 +65,27 @@
 			
 			<div id="textEditOptions">
 				
+				<div id="font" class="docButton">
+					<div id="fontButton">Arial</div>
+					<div id="dropDownArrow" class="menuButtonBg"></div>
+				</div>
+					
 				<div id="fontSize" class="docButton" >
 					<div id="fontSizeLabel">10pt</div>
 					<div id="dropDownArrow" class="menuButtonBg"></div>
+					
+					<!-- Drop down menu for the app -->
+					<div id="dropDownSizes">
+						<div id="8pt">8pt</div>
+						<div id="10pt">10pt</div>
+						<div id="12pt">12pt</div>
+						<div id="14pt">14pt</div>
+						<div id="18pt">18pt</div>
+						<div id="24pt">24pt</div>
+						<div id="36pt">36pt</div>
+						<div id="48pt">48pt</div>	
+						<div id="72pt">72pt</div>
+					</div>
 				</div>
 
 				<div id="textAlignLeft" class="docButton" >
@@ -83,18 +100,39 @@
 					<div id="textAlignRightButtonBg" class="menuButtonBg"></div>	
 				</div>
 				
-				<div id="" class="docButton" >
-					<div id=""class="menuButtonBg"></div>	
+				<div id="textAlignJustify" class="docButton" >
+					<div id="textAlignJustifyButtonBg" class="menuButtonBg"></div>	
 				</div>
 				
-				<div id="" class="docButton" >
-					<div id=""class="menuButtonBg"></div>	
+				<div id="textBold" class="docButton" >
+					<div id="textBoldButtonBg" class="menuButtonBg"></div>	
+				</div>
+				<div id="textItalic" class="docButton" >
+					<div id="textItalicButtonBg" class="menuButtonBg"></div>	
+				</div>
+				<div id="textUnderline" class="docButton" >
+					<div id="textUnderlineButtonBg" class="menuButtonBg"></div>	
+				</div>
+				<div id="textColor" class="docButton" >
+					<div id="textColorButtonBg" class="menuButtonBg"></div>	
+				</div>
+				<div id="textLineSpacing" class="docButton" >
+					<div id="textLineSpacingButtonBg" class="menuButtonBg"></div>	
+				</div>
+				<div id="textSubScript" class="docButton" >
+					<div id="textSubScriptButtonBg" class="menuButtonBg"></div>	
+				</div>
+				<div id="textSuperScript" class="docButton" >
+					<div id="textSuperScriptButtonBg" class="menuButtonBg"></div>	
+				</div>
+				<div id="textStrikethrough" class="docButton" >
+					<div id="textStrikethroughButtonBg" class="menuButtonBg"></div>	
 				</div>
 			</div><!-- closes texEditOptions -->
 		</div><!-- closes leftSidebar -->
 		<!-- Right Sidebar contains .... -->
-		<div id="rightSidebar" style="visibility:hidden;" >
-		
+		<div id="rightSidebar">
+			
 		</div>
 
 

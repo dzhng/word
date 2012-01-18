@@ -79,7 +79,7 @@ TextBox.prototype.setChar = function(chars, start, index)
 		width += chars[ch].width;
 		height = Math.max(chars[ch].height, height);
 		// if space encountered, word found
-		if(chars[ch].letter == ' ') {
+		if(chars[ch].letter == ' ' || ch == chars.length-1) {
 
 			// check if the current line needs to be resized
 			var newPos = this.page.checkObsticle(this.x, this.y+this.curHeight, 
@@ -115,20 +115,22 @@ TextBox.prototype.setChar = function(chars, start, index)
 					word.splice(word.length-1,1);
 					this.curHeight += height;	// move down a bit so we can check for space on next iteration
 				} else {
+					// finish aligning current like and add to line height
 					var lheight = this.lines[curLine].align(lineWidth, "even");
+					this.curHeight += lheight;
+
 					// check if the word fits in the box
 					if((this.curHeight + height) > this.height) {
 						// return the beginning of the current line
 						return word[0].index;
 					}
-					this.curHeight += lheight;
 
-					// add new line
+					// if new word does fit, add new line
 					var line = new TextLine();
 					line.setPoint(0, this.curHeight);
 					this.lines.push(line);
-
 					this.lines[++curLine].insertWord(word, width, height);
+
 					// reset word variables
 					width = 0;
 					height = 0;
@@ -138,13 +140,15 @@ TextBox.prototype.setChar = function(chars, start, index)
 		}
 		ch++;
 	}
+	// make sure to align current line one more time
+	this.lines[curLine].align(lineWidth, "even");
 	return ch;
 };
 
 TextBox.prototype.getLocationFromPoint = function(x, y)
 {
 	// check if it's an empty box
-	if(this.lines.length <= 0) {
+	if(this.lines[0].chars[0] == undefined) {
 		console.log("box empty, going back to last index of section");
 		return false;
 	}
@@ -167,10 +171,13 @@ TextBox.prototype.getLocationFromPoint = function(x, y)
 	//console.log("line %d selected, x: %d, y: %d", c, x, y);
 	// now get the letter within the line
 	var idx = this.lines[c].getPositionFromPoint(x-this.lines[c].x);
-	
-	// set cursor position
-	cursor.index = idx;
-	return true;
+	if(idx === null) {
+		return false;
+	} else {
+		// set cursor position
+		cursor.index = idx;
+		return true;
+	}
 };
 
 TextBox.prototype.drawText = function()

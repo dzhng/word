@@ -34,8 +34,8 @@ var cObject = function()
 
 cObject.prototype.setPoint = function(x, y)
 {
-	this.x = x;
-	this.y = y;
+	this.x = Math.round(x);
+	this.y = Math.round(y);
 };
 
 // look at the pointer location and determine if it's over the window

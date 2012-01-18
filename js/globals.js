@@ -33,7 +33,6 @@ var setupLayers = function()
 		// setup context for drawing
 		layers[context].textAlign = "left";
 		layers[context].textBaseline = "alphabetic";
-		layers[context].fillStyle = settings.background;
 		layers[context].clearRect(0,0,settings.height, settings.width);
 	}
 }

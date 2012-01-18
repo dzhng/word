@@ -108,11 +108,11 @@ Model.prototype.setText = function(text)
 {
 	for(var i = 0; i < text.length; i++) {
 		this.section.insertChar(text[i], cursor.index);
-		// keep inserting new pages until the char can be inserted
-		while(this.section.format(cursor.index-1) === false) {
-			this.insertPage(this.pages.length);
-			//this.changePage(this.pages.length-1);
-		}
+	}
+	// keep inserting new pages until the char can be inserted
+	while(this.section.format(0) === false) {
+		this.insertPage(this.pages.length);
+		//this.changePage(this.pages.length-1);
 	}
 	this.draw();
 };
@@ -121,7 +121,7 @@ Model.prototype.setText = function(text)
 Model.prototype.insertChar = function(key)
 {
 	if(key != null) {
-		console.profile();
+		//console.profile();
 		this.section.insertChar(key, cursor.index);
 
 		// keep inserting new pages until the char can be inserted
@@ -132,7 +132,7 @@ Model.prototype.insertChar = function(key)
 
 		this.pages[this.currentPage].drawMarkup();
 		this.pages[this.currentPage].drawMain();
-		console.profileEnd();
+		//console.profileEnd();
 	}
 };
 

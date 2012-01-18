@@ -40,8 +40,6 @@ Page.prototype.getBoxFromPoint = function(x, y)
 
 	// stores index of closest box
 	var closest = -1;
-	// distance to the cloest box
-	var cDist = 99999;
 
 	// if there are only one box on page, then no need to do any math
 	if(this.boxes.length <= 0) {
@@ -86,13 +84,16 @@ Page.prototype.updateDrag = function(x, y)
 		if(this.boxes[0].lines[0].chars[0] != undefined) {
 			var idx = this.boxes[0].lines[0].chars[0].index;
 			this.model.section.format(idx);	// reformat all text starting with the first letter on the page
-			this.drawMain();
 		} 
+		this.drawMain();
 	} else {
-		this.getBoxFromPoint(x-this.x, y-this.y);
-		// set start highlight index if it's not set
-		// mark highlighted chars
-		var chars = this.model.section.highlight(this.highlightStart, cursor.index);
+		if(this.getBoxFromPoint(x-this.x, y-this.y)) {
+			// set start highlight index if it's not set
+			// mark highlighted chars
+			this.model.section.highlight(this.highlightStart, cursor.index);
+		} else {
+			this.model.section.highlight(this.highlightStart, this.model.section.chars.length-1);
+		}
 		this.drawMarkup();
 	}
 };
@@ -165,6 +166,7 @@ Page.prototype.updateClick = function(x, y)
 		this.model.section.resetHighlight();
 		this.drawMarkup();
 	}
+	// return false means cursor is the last index in section
 	return false;
 };
 
@@ -208,7 +210,6 @@ Page.prototype.drawMain = function()
 
 	context.save();
 	context.translate(this.x, this.y);
-
 	context.clearRect(0,0,this.width, this.height);
 
 	// update all objects on page
@@ -216,10 +217,13 @@ Page.prototype.drawMain = function()
 		this.objects[i].draw();
 	}
 
-	// update all the textboxes on page
+	cursor.style.fontString = "";
+	cursor.style.color = "";
+
 	for(var i = 0; i < this.boxes.length; i++) {
 		this.boxes[i].drawText();
 	}
+
 	context.restore();
 };
 

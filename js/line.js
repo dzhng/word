@@ -25,18 +25,23 @@ TextLine.prototype.insertWord = function(word, width, height, margin)
 	}
 };
 
-// returns the curser position from a x pixel offset from the line
+// returns the index of curser from a x pixel offset from the line
 TextLine.prototype.getPositionFromPoint = function(x)
 {
+	// first check if theres even any characters in this line
+	if(this.chars.length <= 0) {
+		return null;
+	}
+
 	// if we go over the length of the line, then it's definitely the last word
-	if(x >= this.length) {
+	if(x >= this.width) {
 		console.log("x value too high: %d", x);
-		return this.chars.length;
+		return this.chars[this.chars.length-1].index;
 	}
 	// if it's negative position, it's before the length, so first position
 	if(x <= 0) {
 		console.log("x value too low: %d", x);
-		return 0;
+		return this.chars[0].index;
 	}
 
 	var totalWidth=0;
@@ -114,9 +119,11 @@ TextLine.prototype.drawText = function()
 				ch.style.color != cursor.style.color) {
 			context.font = ch.style.fontString;
 			context.fillStyle = ch.style.color;
-			cursor.style = new ch.style;
+			cursor.style = ch.style;
+			//console.log ("character style changed");
 		}
 		context.fillText(ch.letter, ch.x + this.x, ch.y + this.y);
+		//console.log("drawing text %s at %d, %d", ch.letter, ch.x+this.x, ch.y+this.y);
 	}
 };
 

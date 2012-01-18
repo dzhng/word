@@ -35,9 +35,5 @@ var Char = function(letter, style, section)
 	this.highlighted = false;
 };
 
-Char.prototype.setPoint = function(x, y)
-{
-	this.x = x;
-	this.y = y;
-};
+Char.prototype = new cObject;
 

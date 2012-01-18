@@ -20,12 +20,15 @@ var Section = function(model)
 // insert char at the current cursor location
 Section.prototype.insertChar = function(key, index)
 {
+	var style = new Style(cursor.style.color, cursor.style.type,
+			cursor.style.style, cursor.style.size, cursor.style.script, cursor.style.align);
+
 	if(index <= 0) {
-		this.chars.splice(0, 0, new Char(key, cursor.style, this));
+		this.chars.splice(0, 0, new Char(key, style, this));
 	} else if (index >= this.chars.length) {
-		this.chars.splice(this.chars.length, 0, new Char(key, cursor.style, this));
+		this.chars.splice(this.chars.length, 0, new Char(key, style, this));
 	} else {
-		this.chars.splice(index, 0, new Char(key, cursor.style, this));
+		this.chars.splice(index, 0, new Char(key, style, this));
 	}
 	cursor.index++;
 };
