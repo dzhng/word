@@ -86,7 +86,7 @@ Page.prototype.updateDrag = function(x, y)
 			this.model.section.format(idx);	// reformat all text starting with the first letter on the page
 		} 
 		this.drawMain();
-	} else if(this.model.section.length > 0) {
+	} else if(this.model.section.chars.length > 0) {
 		if(this.getBoxFromPoint(x-this.x, y-this.y)) {
 			// set start highlight index if it's not set
 			// mark highlighted chars
