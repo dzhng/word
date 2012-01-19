@@ -25,7 +25,6 @@ var Page = function(model)
 	this.objects = [];
 
 	this.dragging = null;	// currently dragging object
-
 	this.highlightStart = 0;	// highlight start position
 };
 
@@ -79,56 +78,49 @@ Page.prototype.getObjectFromPoint = function(x, y)
 Page.prototype.updateDrag = function(x, y)
 {
 	if(this.dragging != null) {
-		var dx = x-this.x-this.dragging.xoff;
-		var dy = y-this.y-this.dragging.yoff;
+		var nx = x-this.x-this.dragging.xoff;
+		var ny = y-this.y-this.dragging.yoff;
 
-		// prevent object from running into edges
-		if(dx < 0) 
-			dx = 0;
-		if(dy < 0)
-			dy = 0;
-		if(dx+this.dragging.width > this.width)
-			dx = this.width-this.dragging.width;
-		if(dy+this.dragging.height > this.height)
-			dy = this.height-this.dragging.height;
-
-		// prevent object from running into other objects
-		for(i = 0; i < this.objects.length; i++) {
-			var obj = this.objects[i];
-			if(this.dragging != obj) {
-				var ddx, ddy, xsign, ysign;
-				// check for interception
-				if(dy < obj.y+obj.height && dy+this.dragging.height > obj.y) {
-					// if moving object is on left side
-					if(dx < obj.x) {
-						ddx = dx+this.dragging.width - obj.x;
-						xsign = -1;	// we want to move left
-					} else {	// right side
-						ddx = obj.x+obj.width - dx;
-						xsign = 1;
-					}
+		var dx = nx - this.dragging.x;
+		var dy = ny - this.dragging.y;
+		
+		// optimize the x
+		while(dx != 0) {
+			dx = nx - this.dragging.x;
+			for(i = 0; i < this.objects.length; i++) {
+				if(this.objects[i] != this.dragging && this.objects[i].isIntersecting(this.dragging)) {
+					break;
 				}
-				if(dx < obj.x+obj.width && dx+this.dragging.width > obj.x) {
-					// if moving object is on top
-					if(dy < obj.y) {
-						ddy = dy+this.dragging.height - obj.y;
-						ysign = -1;	// we want to move up
-					} else {	// bottom
-						ddy = obj.y+obj.height - dy;
-						ysign = 1;
-					}
-				}
-				// interception detected
-				if(ddx > 0 || ddy > 0) {
-					if(ddy > ddx)	// the lower difference is probably the offending edge
-						dx += xsign*ddx;
-					else 
-						dy += ysign*ddy;
-				}
+			}
+			if(i == this.objects.length && this.dragging.x >= 0 && this.dragging.x+this.dragging.width <= this.width) {
+				// no intersection found, reduce x
+				if(dx > 0) this.dragging.x++; else this.dragging.x--;
+			} else {
+				// intersection found, revert x
+				if(dx > 0) this.dragging.x--; else this.dragging.x++;
+				break;
 			}
 		}
 
-		this.dragging.setPoint(dx, dy);
+		// optimize y
+		while(dy != 0) {
+			dy = ny - this.dragging.y;
+			for(i = 0; i < this.objects.length; i++) {
+				if(this.objects[i] != this.dragging && this.objects[i].isIntersecting(this.dragging)) {
+					break;
+				}
+			}
+			if(i == this.objects.length && this.dragging.y >= 0 && this.dragging.y+this.dragging.height <= this.height) {
+				// no intersection found, reduce x
+				if(dy > 0) this.dragging.y++; else this.dragging.y--;
+			} else {
+				// intersection found, revert x
+				if(dy > 0) this.dragging.y--; else this.dragging.y++;
+				break;
+			}
+		}
+
+		this.dragging.setPoint(this.dragging.x, this.dragging.y);
 
 		// format if there's any text on the page
 		if(this.boxes[0].lines[0].chars[0] != undefined) {

@@ -54,6 +54,13 @@ cObject.prototype.isHovering = function(x, y)
 	return false;
 };
 
+// check if the current object is intersecting another object
+cObject.prototype.isIntersecting = function(object)
+{
+	return (this.x < object.x+object.width && this.x+this.width > object.x 
+			&& this.y < object.y+object.height && this.y+this.height > object.y);
+};
+
 // convert the input coordinate to one that's relative to the window (where top left is (0,0))
 cObject.prototype.relativeCoordinate = function(point)
 {
