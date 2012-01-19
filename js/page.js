@@ -123,9 +123,9 @@ Page.prototype.updateDrag = function(x, y)
 		this.dragging.setPoint(this.dragging.x, this.dragging.y);
 
 		// format if there's any text on the page
-		if(this.boxes[0].lines[0].chars[0] != undefined) {
-			var idx = this.boxes[0].lines[0].chars[0].index;
-			this.model.section.format(idx);	// reformat all text starting with the first letter on the page
+		if(this.boxes.length > 0) {
+			// reformat all text starting with the first letter on the page
+			this.model.section.format(this.boxes[0].index.start);	
 		} 
 		this.drawMain();
 	} else if(this.model.section.chars.length > 0) {

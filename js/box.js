@@ -28,6 +28,8 @@ var TextBox = function(x, y, Width, Height, Page)
 
 	// buffer to stores all the lines of text in the box
 	this.lines = [];
+	// stores the range of section chars currently within this box
+	this.index = {start:0, end:0};
 	
 	// start with one line
 	this.reset();
@@ -60,6 +62,7 @@ TextBox.prototype.setChar = function(chars, start, index)
 	var curLine = 0;
 	// counter
 	var ch = start;
+	this.index.start = start;
 
 	// chars in a word
 	var word = [];
@@ -97,6 +100,7 @@ TextBox.prototype.setChar = function(chars, start, index)
 						var lline = this.lines.pop();
 						var idx = lline.chars[0].index;
 						//console.log("box full, returning to idx %d", idx);
+						this.index.end = idx;
 						return idx;
 					}
 					this.lines[curLine].insertWord(word, width, height);
@@ -112,6 +116,7 @@ TextBox.prototype.setChar = function(chars, start, index)
 					// check if the word fits in the box
 					if((this.curHeight + height) > this.height) {
 						// return the beginning of the current line
+						this.index.end = word[0].index;
 						return word[0].index;
 					}
 
@@ -128,6 +133,7 @@ TextBox.prototype.setChar = function(chars, start, index)
 	}
 	// make sure to align current line one more time
 	this.lines[curLine].align(lineWidth, "even");
+	this.index.end = ch;
 	return ch;
 };
 
