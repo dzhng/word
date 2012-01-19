@@ -215,25 +215,44 @@ Page.prototype.updateClick = function(x, y)
 // check for obsticles and returns an x offset and width offset
 Page.prototype.checkObsticle = function(x, y, width, height)
 {
+	var b = settings.imageBorder;
+	// x1 is for left beginning x coord, x2 is for right ending coord
+	var x1, x2;
+	// we want to maximize x1, minimize x2
+	var mx1 = x, mx2 = x+width;
+
 	// iterate through upper layers and see if there's anything in the way
 	for(var i = 0; i < this.objects.length; i++) {
 		var obj = this.objects[i];
 		// check for y axis intersecting
-		if((y > obj.y && y < obj.y+obj.height) || (y+height > obj.y && y+height < obj.y+obj.height) ||
-			(y > obj.y && y+height < obj.y+obj.height) || (y < obj.y && y+height > obj.y+obj.height)) {
+		if((y > obj.y-b && y < obj.y+obj.height+b) || 
+				(y+height > obj.y-b && y+height < obj.y+obj.height+b) ||
+				(y > obj.y-b && y+height < obj.y+obj.height+b) || 
+				(y < obj.y-b && y+height > obj.y+obj.height+b)) {
 			// TODO: object is in between the lines
 			// check if object is on left or right
-			if((obj.x > x) && (obj.x < x+width)) {
+			if((obj.x-b > x) && (obj.x-b < x+width)) {
 				// object is on right side, modify the width so its shorter
-				return {nX: x, nWidth: obj.x-x};
-			} else if((obj.x+obj.width > x) && (obj.x+obj.width < x+width)) {
+				x1 = x;
+				x2 = obj.x-b;
+			} else if((obj.x+obj.width+b > x) && (obj.x+obj.width+b < x+width)) {
 				// object is on the left side, shift x value right and change width so its shorter
 				//console.log("width: %d", (x+width - (obj.x+obj.width)));
-				return {nX: (obj.x+obj.width), nWidth: (x+width - (obj.x+obj.width))};
+				x1 = obj.x+obj.width+b;
+				x2 = x+width;
+			}
+			// maximize mx1
+			if(x1 > mx1) {
+				mx1 = x1;
+			}
+			// minimize x2
+			if(x2 < mx2) {
+				mx2 = x2;
 			}
 		}
 	}
-	return null;
+	var w = mx2 - mx1;
+	return {nX: mx1, nWidth: (w<0) ? 0 : w};
 };
 
 Page.prototype.drawBackground = function()

@@ -84,14 +84,8 @@ TextBox.prototype.setChar = function(chars, start, index)
 			// check if the current line needs to be resized
 			var newPos = this.page.checkObsticle(this.x, this.y+this.curHeight, 
 						this.width, Math.max(this.lines[curLine].height, height));
-			// obsticle found
-			if(newPos != null) {
-				//console.log("obsticle found");
-				this.lines[curLine].x = newPos.nX - this.x;
-				lineWidth = newPos.nWidth;
-			} else {
-				lineWidth = this.width;
-			}
+			this.lines[curLine].x = newPos.nX - this.x;
+			lineWidth = newPos.nWidth;
 
 			// if can't add to this line, make a new line
 			if(this.lines[curLine].width + width < lineWidth) {
@@ -109,33 +103,26 @@ TextBox.prototype.setChar = function(chars, start, index)
 				height = 0;
 				word = [];
 			} else {
-				// see if there's enough room on the line for just one word
-				if(this.lines[curLine].width == width && width > lineWidth) {
-					ch--;	// cancel out the increment, we want to keep looking for spaces
-					word.splice(word.length-1,1);
-					this.curHeight += height;	// move down a bit so we can check for space on next iteration
-				} else {
-					// finish aligning current like and add to line height
-					var lheight = this.lines[curLine].align(lineWidth, "even");
-					this.curHeight += lheight;
+				// finish aligning current like and add to line height
+				var lheight = this.lines[curLine].align(lineWidth, "even");
+				this.curHeight += lheight;
 
-					// check if the word fits in the box
-					if((this.curHeight + height) > this.height) {
-						// return the beginning of the current line
-						return word[0].index;
-					}
-
-					// if new word does fit, add new line
-					var line = new TextLine();
-					line.setPoint(0, this.curHeight);
-					this.lines.push(line);
-					this.lines[++curLine].insertWord(word, width, height);
-
-					// reset word variables
-					width = 0;
-					height = 0;
-					word = [];
+				// check if the word fits in the box
+				if((this.curHeight + height) > this.height) {
+					// return the beginning of the current line
+					return word[0].index;
 				}
+
+				// if new word does fit, add new line
+				var line = new TextLine();
+				line.setPoint(0, this.curHeight);
+				this.lines.push(line);
+				this.lines[++curLine].insertWord(word, width, height);
+
+				// reset word variables
+				width = 0;
+				height = 0;
+				word = [];
 			}
 		}
 		ch++;
