@@ -120,8 +120,6 @@ Page.prototype.updateDrag = function(x, y)
 			}
 		}
 
-		this.dragging.setPoint(this.dragging.x, this.dragging.y);
-
 		// format if there's any text on the page
 		if(this.boxes.length > 0) {
 			// reformat all text starting with the first letter on the page
@@ -183,6 +181,7 @@ Page.prototype.addBox = function(box)
 Page.prototype.addImage = function(image)
 {
 	image.visible = true;
+	image.page = this;
 	this.objects.push(image);
 	// format if there's any text on the page
 	if(this.boxes[0].lines[0].chars[0] != undefined) {

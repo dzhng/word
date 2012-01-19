@@ -6,16 +6,23 @@ var TextImage = function(x, y, width, height, url)
 	// add the border
 	this.width = width;
 	this.height = height;
-
 	// border used for text alignment
 	this.textBorder = settings.imageBorder;
 
+	this.page = null;	// page this image belongs to
 	this.url = url;
 	this.image = new Image();
 	this.image.src = this.url;
+	this.image.onload = this.imageLoaded.bind(this);
 };
 
 TextImage.prototype = new cObject;
+
+TextImage.prototype.imageLoaded = function()
+{
+	console.log("image loaded");
+	this.page.drawMain();
+};
 
 TextImage.prototype.draw = function()
 {
