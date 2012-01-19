@@ -81,48 +81,47 @@ TextBox.prototype.setChar = function(chars, start, index)
 		// if space encountered, word found
 		if(chars[ch].letter == ' ' || ch == chars.length-1) {
 
-			// check if the current line needs to be resized
-			var newPos = this.page.checkObsticle(this.x, this.y+this.curHeight, 
-						this.width, Math.max(this.lines[curLine].height, height));
-			this.lines[curLine].x = newPos.nX - this.x;
-			lineWidth = newPos.nWidth;
+			// keep trying until the word is added in
+			while(word.length != 0) {
+				// check if the current line needs to be resized
+				var newPos = this.page.checkObsticle(this.x, this.y+this.curHeight, 
+							this.width, Math.max(this.lines[curLine].height, height));
+				this.lines[curLine].x = newPos.nX - this.x;
+				lineWidth = newPos.nWidth;
 
-			// if can't add to this line, make a new line
-			if(this.lines[curLine].width + width < lineWidth) {
-				// check if this word will fit
-				if((this.curHeight + height) > this.height) {
-					// return the beginning of the current line
-					var lline = this.lines.pop();
-					var idx = lline.chars[0].index;
-					//console.log("box full, returning to idx %d", idx);
-					return idx;
+				// if can't add to this line, make a new line
+				if(this.lines[curLine].width + width < lineWidth) {
+					// check if this word will fit
+					if((this.curHeight + height) > this.height) {
+						// return the beginning of the current line
+						var lline = this.lines.pop();
+						var idx = lline.chars[0].index;
+						//console.log("box full, returning to idx %d", idx);
+						return idx;
+					}
+					this.lines[curLine].insertWord(word, width, height);
+					// reset word variables
+					width = 0;
+					height = 0;
+					word = [];
+				} else {
+					// finish aligning current line and add to line height
+					var lheight = this.lines[curLine].align(lineWidth, "even");
+					this.curHeight += lheight;
+
+					// check if the word fits in the box
+					if((this.curHeight + height) > this.height) {
+						// return the beginning of the current line
+						return word[0].index;
+					}
+
+					// if there's enough height left, add new line
+					var line = new TextLine();
+					line.setPoint(0, this.curHeight);
+					line.height = height;	// new line defaults to height of coming word
+					this.lines.push(line);
+					curLine++;
 				}
-				this.lines[curLine].insertWord(word, width, height);
-				// reset word variables
-				width = 0;
-				height = 0;
-				word = [];
-			} else {
-				// finish aligning current like and add to line height
-				var lheight = this.lines[curLine].align(lineWidth, "even");
-				this.curHeight += lheight;
-
-				// check if the word fits in the box
-				if((this.curHeight + height) > this.height) {
-					// return the beginning of the current line
-					return word[0].index;
-				}
-
-				// if new word does fit, add new line
-				var line = new TextLine();
-				line.setPoint(0, this.curHeight);
-				this.lines.push(line);
-				this.lines[++curLine].insertWord(word, width, height);
-
-				// reset word variables
-				width = 0;
-				height = 0;
-				word = [];
 			}
 		}
 		ch++;
