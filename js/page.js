@@ -79,7 +79,57 @@ Page.prototype.getObjectFromPoint = function(x, y)
 Page.prototype.updateDrag = function(x, y)
 {
 	if(this.dragging != null) {
-		this.dragging.setPoint(x-this.x-this.dragging.xoff, y-this.y-this.dragging.yoff);
+		var dx = x-this.x-this.dragging.xoff;
+		var dy = y-this.y-this.dragging.yoff;
+
+		// prevent object from running into edges
+		if(dx < 0) 
+			dx = 0;
+		if(dy < 0)
+			dy = 0;
+		if(dx+this.dragging.width > this.width)
+			dx = this.width-this.dragging.width;
+		if(dy+this.dragging.height > this.height)
+			dy = this.height-this.dragging.height;
+
+		// prevent object from running into other objects
+		for(i = 0; i < this.objects.length; i++) {
+			var obj = this.objects[i];
+			if(this.dragging != obj) {
+				var ddx, ddy, xsign, ysign;
+				// check for interception
+				if(dy < obj.y+obj.height && dy+this.dragging.height > obj.y) {
+					// if moving object is on left side
+					if(dx < obj.x) {
+						ddx = dx+this.dragging.width - obj.x;
+						xsign = -1;	// we want to move left
+					} else {	// right side
+						ddx = obj.x+obj.width - dx;
+						xsign = 1;
+					}
+				}
+				if(dx < obj.x+obj.width && dx+this.dragging.width > obj.x) {
+					// if moving object is on top
+					if(dy < obj.y) {
+						ddy = dy+this.dragging.height - obj.y;
+						ysign = -1;	// we want to move up
+					} else {	// bottom
+						ddy = obj.y+obj.height - dy;
+						ysign = 1;
+					}
+				}
+				// interception detected
+				if(ddx > 0 || ddy > 0) {
+					if(ddy > ddx)	// the lower difference is probably the offending edge
+						dx += xsign*ddx;
+					else 
+						dy += ysign*ddy;
+				}
+			}
+		}
+
+		this.dragging.setPoint(dx, dy);
+
 		// format if there's any text on the page
 		if(this.boxes[0].lines[0].chars[0] != undefined) {
 			var idx = this.boxes[0].lines[0].chars[0].index;
