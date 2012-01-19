@@ -6,7 +6,7 @@
 // when adding boxes, check if the new box can fit - if not, return false so the model can make a new page for it
 //
 // NOTE:
-// There is no concept of page margin in <INSERT NAME HERE>, this is abstracted away
+// There is no concept of page margin in this editor, this is abstracted away
 // by the object oriented model of using dynmanicly placed boxes
 
 /************** OBJECT DECLARATION *******************/
@@ -240,7 +240,14 @@ Page.prototype.drawBackground = function()
 {
 	var context = layers.bottomContext;
 
+	// TODO: Selective clearing. clear the entire canvas before drawing background
+	context.clearRect(0,0,context.canvas.width,context.canvas.height);
+
 	context.save();
+	context.shadowOffsetX = 5;
+	context.shadowOffsetY = 5;
+	context.shadowBlur    = 4;
+	context.shadowColor   = settings.shadowColor;
 	context.fillStyle = this.background;
 	context.fillRect(this.x,this.y,this.width, this.height);
 	context.restore();

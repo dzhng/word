@@ -64,6 +64,7 @@ Model.prototype.changePage = function(index)
 	// make current page in middle of screen, draw left page and right page
 	var page = this.pages[this.currentPage];
 	page.x = settings.width/2 - page.width/2;
+	page.y = pageOffset.top;
 	page.visible = true;
 };
 
@@ -93,7 +94,7 @@ Model.prototype.updateSize = function()
 {
 	// find the maximum size of the canavs that would fit on the page
 	settings.width = window.innerWidth;
-	settings.height = PAGE_SIZE.height;
+	settings.height = PAGE_SIZE.height + pageOffset.top + pageOffset.bottom;
 
 	for(context in layers) {
 		layers[context].canvas.height = settings.height;

@@ -3,16 +3,23 @@
 var PPI = 72;												// pixel per inch to calibrate everything to
 var PAGE_SIZE = {width: 8.5*PPI, height: 11*PPI};			// size for one page, standard paper size, in inches
 var MAX_IDX = 9999999;										// max index for chars in section
+var pageOffset = {top: 20, bottom: 20};					// page offsets in pixels
 
 /************** GLOBAL VARIABLES *******************/
 // global persistant settings
 // template: template page variable
-var settings = {width: window.innerWidth, height: PAGE_SIZE.height, template: null,	background: "rgba(255, 255, 255, 0)", highlightColor: "rgba(20,20,180,0.5)", imageBorder: 0.2*PPI};
-console.log("window width: %d, height: %d", settings.width, settings.height);
+var settings = {
+	width: window.innerWidth, height: PAGE_SIZE.height + pageOffset.top + pageOffset.bottom, 
+	template: null,	background: "rgba(255, 255, 255, 0)", highlightColor: "rgba(20,20,180,0.5)", 
+	shadowColor: "rgba(0,0,0,0.5)", imageBorder: 0.2*PPI
+};
 
 // contexts for different canvas layers, arranged from low to high
 // top context is on the top most layer, so it also captures user input commands
-var layers = {bottomContext: null, markupLowContext: null, mainContext: null, markupHighContext: null, topContext: null};
+var layers = {
+	bottomContext: null, markupLowContext: null, mainContext: null, 
+	markupHighContext: null, topContext: null
+};
 
 // create a new canvas element per page
 var setupLayers = function()
