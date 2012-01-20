@@ -10,7 +10,7 @@ var pageOffset = {top: 20, bottom: 20};					// page offsets in pixels
 var settings = {
 	width: window.innerWidth, height: PAGE_SIZE.height + pageOffset.top + pageOffset.bottom, 
 	template: null,	background: "rgba(255, 255, 255, 0)", highlightColor: "rgba(20,20,180,0.5)", 
-	shadowColor: "rgba(0,0,0,0.5)", imageBorder: 0.2*PPI
+	shadowColor: "rgba(0,0,0,0.5)", cursorColor: "rgb(0,0,0)", imageBorder: 0.2*PPI
 };
 
 // contexts for different canvas layers, arranged from low to high
@@ -19,6 +19,9 @@ var layers = {
 	bottomContext: null, markupLowContext: null, mainContext: null, 
 	markupHighContext: null, topContext: null
 };
+
+// div overlay used for catching inputs and stores SVG elements
+var overlay;
 
 // create a new canvas element per page
 var setupLayers = function()
@@ -41,6 +44,9 @@ var setupLayers = function()
 		layers[context].textBaseline = "alphabetic";
 		layers[context].clearRect(0,0,settings.height, settings.width);
 	}
+
+	overlay = document.createElement("div");
+	document.body.appendChild(overlay);
 }
 
 // initialize the curser at default position, also keeps track of current page, box..etc

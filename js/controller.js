@@ -23,25 +23,25 @@ var Controller = function(model)
     // add input event listeners
 	
     this.mouseDownHandler = this.mouseDown.bind(this);
-    layers.topContext.canvas.addEventListener("mousedown", this.mouseDownHandler, false);
+    overlay.addEventListener("mousedown", this.mouseDownHandler, false);
     
     this.mouseUpHandler = this.mouseUp.bind(this);
-	layers.topContext.canvas.addEventListener("mouseup", this.mouseUpHandler, false);
+	overlay.addEventListener("mouseup", this.mouseUpHandler, false);
     
     this.mouseMoveHandler = this.mouseMove.bind(this);
-    layers.topContext.canvas.addEventListener("mousemove", this.mouseMoveHandler, false);
+    overlay.addEventListener("mousemove", this.mouseMoveHandler, false);
     
     //this.mouseWheelHandler = this.mouseWheel.bind(this);
     //window.addEventListener("mousewheel", this.mouseWheelHandler, false);
 
 	this.keyDownHandler = this.keyDown.bind(this);
-	layers.topContext.canvas.addEventListener("keydown", this.keyDownHandler, false);
+	overlay.addEventListener("keydown", this.keyDownHandler, false);
 
 	this.keyUpHandler = this.keyUp.bind(this);
-	layers.topContext.canvas.addEventListener("keyup", this.keyUpHandler, false);
+	overlay.addEventListener("keyup", this.keyUpHandler, false);
 
 	this.keyPressHandler = this.keyPress.bind(this);
-	layers.topContext.canvas.addEventListener("keypress", this.keyPressHandler, false);
+	overlay.addEventListener("keypress", this.keyPressHandler, false);
 
 	// setup timer for frame refresh
 	var fps = 30;	// frames per second

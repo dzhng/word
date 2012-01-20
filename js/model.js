@@ -18,13 +18,18 @@ var Model = function()
 
 	this.menuVisible = false;
 
-	/*** SETUP CONTROLLER ***/
+	/*** MODULES ***/
 	// variable deciarations
 	this.controller = new Controller(this);								// user input controller
 	this.section = new Section(this);									// section object stores all chars in the document
 	this.menu = new Menu();												// option selection menu
 	this.pages = [];													// array to store all currently viewable window
 	this.currentPage = 0;												// currently viewed page, the page to draw
+
+	// setup raphael class for SVG user interaction components
+	this.paper = Raphael(overlay, settings.width, settings.height);
+	// initialize the text cursor - this is in the model because there'll be only one cursor in the program
+	this.cursor = this.paper.rect(0,0,10,10).attr({fill: settings.cursorColor}).show();
 	
 	// make new pages
 	this.insertPage(0);
