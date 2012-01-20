@@ -4,6 +4,7 @@
 
 // TODO: 
 // need a minimum box size, and use that as the size to start chopping up word
+// add support for return character to make new lines
 //
 // NOTE:
 
@@ -139,10 +140,13 @@ TextBox.prototype.setChar = function(chars, start, index)
 
 TextBox.prototype.getLocationFromPoint = function(x, y)
 {
-	// check if it's an empty box
-	if(this.lines[0].chars[0] == undefined) {
+	// check if it's an empty box. because index.end is the next char
+	// from the last char of the box, the only time start == end is when there's
+	// no chars in the box
+	if(this.index.start == this.index.end) {
 		console.log("box empty, going back to last index of section");
-		return false;
+		cursor.index = this.index.start;
+		return true;
 	}
 
 	// reset column and word
