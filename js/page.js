@@ -130,9 +130,7 @@ Page.prototype.updateDrag = function(x, y)
 		if(this.getBoxFromPoint(x-this.x, y-this.y)) {
 			// set start highlight index if it's not set
 			// mark highlighted chars
-			this.model.section.highlight(this.highlightStart, cursor.index);
-		} else {
-			this.model.section.highlight(this.highlightStart, this.model.section.chars.length-1);
+			this.model.section.highlight(this.highlightStart, cursor.index++);
 		}
 		this.drawMarkup();
 	}

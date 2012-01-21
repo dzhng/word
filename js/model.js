@@ -100,12 +100,12 @@ Model.prototype.drawCursor = function()
 	} else if(cursor.index == this.section.chars.length) {	// if there are chars there, draw in front of char
 		ch = this.section.chars[cursor.index-1];
 		cx = ch.getAbsolute().x+ch.width-settings.cursor.width;
-		cy = ch.getAbsolute().y-ch.height;
+		cy = ch.getAbsolute().y-ch.height+(ch.style.margin._bottom*ch.style.size);
 		height = ch.height;
 	} else {	// in all other cases, the cursor is in front of the currently selected char
 		ch = this.section.chars[cursor.index];
 		cx = ch.getAbsolute().x-settings.cursor.width;
-		cy = ch.getAbsolute().y-ch.height;
+		cy = ch.getAbsolute().y-ch.height+(ch.style.margin._bottom*ch.style.size);
 		height = ch.height;
 	}
 	this.cursor.attr({x:cx, y:cy, height:height});
@@ -212,12 +212,14 @@ Model.prototype.updateDrag = function(x, y)
 {
 	this.focus();
 	this.pages[this.currentPage].updateDrag(x, y);
+	this.drawCursor();
 };
 
 Model.prototype.stopDrag = function(x, y)
 {
 	this.focus();
 	this.pages[this.currentPage].stopDrag(x, y);
+	this.drawCursor();
 };
 
 // called when mouse moves
