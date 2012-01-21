@@ -3,7 +3,8 @@
 // Written by: David Zhang
 
 // TODO: 
-// Make a section capable of holding generalize objects instead of just boxes
+// Make a section capable of holding generic objects instead of just chars, so we can 
+// insert an image inline with chars.
 //
 // NOTE:
 //
@@ -12,7 +13,6 @@
 var Section = function(model)
 {
 	this.chars = [];
-
 	this.model = model;
 };
 

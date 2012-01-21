@@ -162,7 +162,7 @@ Page.prototype.addBox = function(box)
 	// if there are already boxes on the page, try to add it behind last box
 	
 	// add input box to boxes array
-	box.page = this;
+	box.parent = this;
 	this.boxes.push(box);
 	// format if there's any text on the page
 	if(this.boxes[0].lines[0].chars[0] != undefined) {
@@ -181,7 +181,7 @@ Page.prototype.addBox = function(box)
 Page.prototype.addImage = function(image)
 {
 	image.visible = true;
-	image.page = this;
+	image.parent = this;
 	this.objects.push(image);
 	// format if there's any text on the page
 	if(this.boxes[0].lines[0].chars[0] != undefined) {

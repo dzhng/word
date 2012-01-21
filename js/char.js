@@ -29,7 +29,7 @@ var Char = function(letter, style, section)
 	}
 
 	// height of the letter taking into account all the margins
-	this.height = style.size * (1 + style.margin._top + style.margin._bottom);
+	this.height = style.height;
 
 	// highlighted state, defaults to false
 	this.highlighted = false;

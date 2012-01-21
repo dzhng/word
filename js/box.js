@@ -11,6 +11,9 @@
 /************** OBJECT DECLARATION *******************/
 var TextBox = function(x, y, Width, Height, Page)
 {
+	// the page this box belongs to
+	this.parent = Page;
+
 	// save the point of this box in page coordinates
 	this.setPoint(x, y);
 
@@ -23,9 +26,6 @@ var TextBox = function(x, y, Width, Height, Page)
 	// unfixed textboxes will expand down until end of page
 	this.fixed = true;
 	this.stopDistance = PPI;	// distance from bottom of the page to stop expanding (margin)
-
-	// the page this box belongs to
-	this.page = Page;
 
 	// buffer to stores all the lines of text in the box
 	this.lines = [];
@@ -46,7 +46,7 @@ TextBox.prototype.reset = function()
 	this.curHeight = 0;	// reset current line height
 
 	// add new line
-	var line = new TextLine();
+	var line = new TextLine(this);
 	line.setPoint(0, this.curHeight);
 	this.lines.push(line);
 };
@@ -88,7 +88,7 @@ TextBox.prototype.setChar = function(chars, start, index)
 			// keep trying until the word is added in
 			while(word.length != 0) {
 				// check if the current line needs to be resized
-				var newPos = this.page.checkObsticle(this.x, this.y+this.curHeight, 
+				var newPos = this.parent.checkObsticle(this.x, this.y+this.curHeight, 
 							this.width, Math.max(this.lines[curLine].height, height));
 				this.lines[curLine].x = newPos.nX - this.x;
 				lineWidth = newPos.nWidth;
@@ -122,7 +122,7 @@ TextBox.prototype.setChar = function(chars, start, index)
 					}
 
 					// if there's enough height left, add new line
-					var line = new TextLine();
+					var line = new TextLine(this);
 					line.setPoint(0, this.curHeight);
 					line.height = height;	// new line defaults to height of coming word
 					this.lines.push(line);

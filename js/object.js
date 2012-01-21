@@ -1,6 +1,9 @@
 
 var cObject = function()
 {
+	// parent object
+	this.parent = null;
+
 	this.x = 0;
 	this.y = 0;
 	this.width = 0;
@@ -59,6 +62,22 @@ cObject.prototype.isIntersecting = function(object)
 {
 	return (this.x < object.x+object.width && this.x+this.width > object.x 
 			&& this.y < object.y+object.height && this.y+this.height > object.y);
+};
+
+// get the absolute coordinate by stepping up the tree and adding relative (x,y) coordinates
+cObject.prototype.getAbsolute = function()
+{
+	var x = this.x;
+	var y = this.y;
+	var p = this.parent;
+
+	while(p != undefined || p != null) {
+		x += p.x;
+		y += p.y;
+		p = p.parent;
+	}
+
+	return {x:x, y:y};
 };
 
 // convert the input coordinate to one that's relative to the window (where top left is (0,0))

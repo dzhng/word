@@ -1,3 +1,5 @@
+// NOTE: This object should be destoryed and remade when changed
+
 var Style = function(color, type, style, size, script, align)
 {
 	// fill style for canvas
@@ -22,11 +24,9 @@ var Style = function(color, type, style, size, script, align)
 	// line element will take the highest margin as default
 	this.margin = {_top: 0.1, _bottom: 0.1};
 
-	this.fontString = this.getFontString();
-};
+	// total height after margins
+	this.height = this.size * (1 + this.margin._top + this.margin._bottom);
 
-Style.prototype.getFontString = function()
-{
-	return this.style + " " + this.size + "px " + this.type;
+	this.fontString = this.style + " " + this.size + "px " + this.type;
 };
 

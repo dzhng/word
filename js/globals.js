@@ -11,7 +11,7 @@ var settings = {
 	width: window.innerWidth, height: PAGE_SIZE.height + pageOffset.top + pageOffset.bottom, 
 	template: null,	background: "rgba(255, 255, 255, 0)", highlightColor: "rgba(20,20,180,0.5)", 
 	shadowColor: "rgba(0,0,0,0.5)", cursorColor: "rgb(0,0,0)", imageBorder: 0.2*PPI,
-	cursor: {width: 2, height: 10}
+	cursor: {width: 1, height: 10}
 };
 
 // contexts for different canvas layers, arranged from low to high
@@ -47,6 +47,7 @@ var setupLayers = function()
 	}
 
 	overlay = document.createElement("div");
+	overlay.tabIndex = 1;
 	document.body.appendChild(overlay);
 }
 

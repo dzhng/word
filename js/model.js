@@ -30,7 +30,7 @@ var Model = function()
 	this.paper = Raphael(overlay, settings.width, settings.height);
 	// initialize the text cursor - this is in the model because there'll be only one cursor in the program
 	this.cursor = this.paper.rect(0,0, settings.cursor.width, settings.cursor.height)
-		.attr({fill: settings.cursorColor}).show();
+		.attr({"stroke-width": 0, fill: settings.cursorColor}).show();
 	
 	// make new pages
 	this.insertPage(0);
@@ -47,7 +47,7 @@ var Model = function()
 /************** VIEW FUNCTIONS **************/
 Model.prototype.focus = function()
 {
-	layers.topContext.canvas.focus();
+	overlay.focus();
 };
 
 /************** BUILTIN FUNCTIONS *******************/
@@ -81,6 +81,34 @@ Model.prototype.draw = function()
 	this.pages[this.currentPage].drawBackground();
 	this.pages[this.currentPage].drawMain();
 	this.pages[this.currentPage].drawMarkup();
+	this.drawCursor();
+};
+
+// update the location of the cursor
+Model.prototype.drawCursor = function()
+{
+	// move the cursor to the correct location and set height
+	// special case when the cursor needs to be at the end of the last char
+	var ch;
+	var cx, cy, height;
+
+	// if no chars on the document yet, draw at box
+	if(this.section.chars.length == 0) {
+		cx = this.pages[this.currentPage].boxes[0].getAbsolute().x-settings.cursor.width;
+		cy = this.pages[this.currentPage].boxes[0].getAbsolute().y;
+		height = cursor.style.height;
+	} else if(cursor.index == this.section.chars.length) {	// if there are chars there, draw in front of char
+		ch = this.section.chars[cursor.index-1];
+		cx = ch.getAbsolute().x+ch.width-settings.cursor.width;
+		cy = ch.getAbsolute().y-ch.height;
+		height = ch.height;
+	} else {	// in all other cases, the cursor is in front of the currently selected char
+		ch = this.section.chars[cursor.index];
+		cx = ch.getAbsolute().x-settings.cursor.width;
+		cy = ch.getAbsolute().y-ch.height;
+		height = ch.height;
+	}
+	this.cursor.attr({x:cx, y:cy, height:height});
 };
 
 // add a box to continue the current page
@@ -139,6 +167,7 @@ Model.prototype.insertChar = function(key)
 
 		this.pages[this.currentPage].drawMarkup();
 		this.pages[this.currentPage].drawMain();
+		this.drawCursor();
 		//console.profileEnd();
 	}
 };
@@ -152,7 +181,9 @@ Model.prototype.backspace = function()
 	}
 	this.section.chars.splice(--cursor.index, 1);
 	this.section.format(cursor.index-1);
-	this.draw();
+	this.pages[this.currentPage].drawMarkup();
+	this.pages[this.currentPage].drawMain();
+	this.drawCursor();
 	//TODO: Delete all highlighted characters
 };
 
@@ -168,17 +199,7 @@ Model.prototype.updateClick = function(x, y)
 			// place in the section. TODO: This behavior might need to be adjusted
 			cursor.index = this.section.chars.length;
 		}
-		// move the cursor to the correct location and set height
-		// special case when the cursor needs to be at the end of the last char
-		var cx, cy, ch;
-		var ch;
-		if(cursor.index == this.section.chars.length) {
-			ch = this.section.chars[cursor.index-1];
-			cx = ch.x+ch.width-settings.cursor.width;
-		} else {	// in all other cases, the cursor is in front of the currently selected char
-			ch = this.section.chars[cursor.index];
-		}
-		this.cursor.attr({x:,y:,height:});
+		this.drawCursor();
 	} else {
 		// if nothing else is clicked, toggle menu visibility
 		this.menuVisible = !this.menuVisible;
@@ -189,11 +210,13 @@ Model.prototype.updateClick = function(x, y)
 // Used to drag highlighted text, or highlighted picture
 Model.prototype.updateDrag = function(x, y)
 {
+	this.focus();
 	this.pages[this.currentPage].updateDrag(x, y);
 };
 
 Model.prototype.stopDrag = function(x, y)
 {
+	this.focus();
 	this.pages[this.currentPage].stopDrag(x, y);
 };
 

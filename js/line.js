@@ -2,8 +2,11 @@
 // runs alignment algorithms, stores total line height, and determines letter baseline for drawing
 // Written by: David Zhang
 
-var TextLine = function()
+var TextLine = function(Box)
 {
+	// box this line belongs to
+	this.parent = Box;
+
 	// buffer to store all the chars
 	this.chars = [];
 
@@ -21,6 +24,7 @@ TextLine.prototype.insertWord = function(word, width, height, margin)
 
 	//TODO: Decide weather to push the last space or not	
 	for(var i = 0; i < word.length; i++) {
+		word[i].parent = this;
 		this.chars.push(word[i]);
 	}
 };
