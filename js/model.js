@@ -29,8 +29,10 @@ var Model = function()
 	// setup raphael class for SVG user interaction components
 	this.paper = Raphael(overlay, settings.width, settings.height);
 	// initialize the text cursor - this is in the model because there'll be only one cursor in the program
+	var anim = Raphael.animation({opacity:0}, 800, '>').repeat(Infinity);
 	this.cursor = this.paper.rect(0,0, settings.cursor.width, settings.cursor.height)
-		.attr({"stroke-width": 0, fill: settings.cursorColor}).show();
+		.attr({"stroke-width": 0, fill: settings.cursorColor, opacity:1})
+		.animate(anim).show();
 	
 	// make new pages
 	this.insertPage(0);
@@ -94,17 +96,17 @@ Model.prototype.drawCursor = function()
 
 	// if no chars on the document yet, draw at box
 	if(this.section.chars.length == 0) {
-		cx = this.pages[this.currentPage].boxes[0].getAbsolute().x-settings.cursor.width;
+		cx = this.pages[this.currentPage].boxes[0].getAbsolute().x-settings.cursor.width/2;
 		cy = this.pages[this.currentPage].boxes[0].getAbsolute().y;
 		height = cursor.style.height;
 	} else if(cursor.index == this.section.chars.length) {	// if there are chars there, draw in front of char
 		ch = this.section.chars[cursor.index-1];
-		cx = ch.getAbsolute().x+ch.width-settings.cursor.width;
+		cx = ch.getAbsolute().x+ch.width-settings.cursor.width/2;
 		cy = ch.getAbsolute().y-ch.height+(ch.style.margin._bottom*ch.style.size);
 		height = ch.height;
 	} else {	// in all other cases, the cursor is in front of the currently selected char
 		ch = this.section.chars[cursor.index];
-		cx = ch.getAbsolute().x-settings.cursor.width;
+		cx = ch.getAbsolute().x-settings.cursor.width/2;
 		cy = ch.getAbsolute().y-ch.height+(ch.style.margin._bottom*ch.style.size);
 		height = ch.height;
 	}
@@ -195,9 +197,8 @@ Model.prototype.updateClick = function(x, y)
 	if(this.pages[this.currentPage].isHovering(x, y)) {
 		// if the page failed to update click, it didn't select any object. Default to the last char in the section
 		if(this.pages[this.currentPage].updateClick(x, y) == false) {
-			// if nothing is clicked, then just set the cursor to the last 
-			// place in the section. TODO: This behavior might need to be adjusted
-			cursor.index = this.section.chars.length;
+			// if nothing is clicked, then cursor doesn't change
+			// TODO: This behavior might need to be adjusted
 		}
 		this.drawCursor();
 	} else {
