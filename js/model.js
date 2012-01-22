@@ -10,14 +10,6 @@
 /************** OBJECT DECLARATION *******************/
 var Model = function()
 {
-	// set default page template as two columns
-	settings.template = FourBoxes;
-
-	/*** SETUP VIEW ***/
-	// find the correct window size
-
-	this.menuVisible = false;
-
 	/*** MODULES ***/
 	// variable deciarations
 	this.controller = new Controller(this);								// user input controller
@@ -26,11 +18,9 @@ var Model = function()
 	this.pages = [];													// array to store all currently viewable window
 	this.currentPage = 0;												// currently viewed page, the page to draw
 
-	// setup raphael class for SVG user interaction components
-	this.paper = Raphael(overlay, settings.width, settings.height);
 	// initialize the text cursor - this is in the model because there'll be only one cursor in the program
 	var anim = Raphael.animation({opacity:0}, 800, '>').repeat(Infinity);
-	this.cursor = this.paper.rect(0,0, settings.cursor.width, settings.cursor.height)
+	this.cursor = paper.rect(0,0, settings.cursor.width, settings.cursor.height)
 		.attr({"stroke-width": 0, fill: settings.cursorColor, opacity:1})
 		.animate(anim).show();
 	
@@ -39,9 +29,16 @@ var Model = function()
 	// change to the newly inserted page
 	this.changePage(0);
 
-	// handler to update draws on window resize
+	// make menu invisible by default
+	this.menuVisible = false;
+
+	/*** SETUP VIEW ***/
+	// find the correct window size
 	this.updateSize();
+
+	// handler to update draws on window resize
 	window.onresize = this.updateSize.bind(this);
+
 	// focus on new pages
 	this.focus();
 };
@@ -76,9 +73,15 @@ Model.prototype.changePage = function(index)
 	page.visible = true;
 };
 
-// redraw the current page, as well as the 2 adjecent pages
+// redraw everything
 Model.prototype.draw = function()
 {
+	// keep inserting new pages until the char can be inserted
+	while(this.section.format(0) === false) {
+		this.insertPage(this.pages.length);
+		//this.changePage(this.pages.length-1);
+	}
+
 	// redraw the current window
 	this.pages[this.currentPage].drawBackground();
 	this.pages[this.currentPage].drawMain();
@@ -146,11 +149,6 @@ Model.prototype.setText = function(text)
 	for(var i = 0; i < text.length; i++) {
 		this.section.insertChar(text[i], cursor.index);
 	}
-	// keep inserting new pages until the char can be inserted
-	while(this.section.format(0) === false) {
-		this.insertPage(this.pages.length);
-		//this.changePage(this.pages.length-1);
-	}
 	this.draw();
 };
 
@@ -204,6 +202,11 @@ Model.prototype.updateClick = function(x, y)
 	} else {
 		// if nothing else is clicked, toggle menu visibility
 		this.menuVisible = !this.menuVisible;
+		if(this.menuVisible) {
+			this.pages[this.currentPage].showLayoutMenu();
+		} else {
+			this.pages[this.currentPage].hideLayoutMenu();
+		}
 		console.log("menu visible status: %d", this.menuVisible);
 	}
 };

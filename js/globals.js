@@ -8,10 +8,20 @@ var pageOffset = {top: 20, bottom: 20};					// page offsets in pixels
 // global persistant settings
 // template: template page variable
 var settings = {
-	width: window.innerWidth, height: PAGE_SIZE.height + pageOffset.top + pageOffset.bottom, 
-	template: null,	background: "rgba(255, 255, 255, 0)", highlightColor: "rgba(20,20,180,0.2)", 
-	shadowColor: "rgba(0,0,0,0.5)", cursorColor: "rgb(0,0,0)", imageBorder: 0.2*PPI,
-	cursor: {width: 2, height: 10}
+	cursor: {width: 2, height: 10},
+	width: window.innerWidth, 
+	height: PAGE_SIZE.height + pageOffset.top + pageOffset.bottom, 
+	template: null,	
+
+	// design settings
+	background: "rgba(255, 255, 255, 0)", 
+	highlightColor: "rgba(20,20,180,0.2)", 
+	shadowColor: "rgba(0,0,0,0.5)", 
+	cursorColor: "rgb(0,0,0)", 
+	boxOutlineColor: "rgb(0,0,0)",
+	boxFill: "rgb(0,120,0)",
+	boxHandleColor: "rgba(0,0,0)",
+	imageBorder: 0.2*PPI,
 };
 
 // contexts for different canvas layers, arranged from low to high
@@ -23,6 +33,7 @@ var layers = {
 
 // div overlay used for catching inputs and stores SVG elements
 var overlay;
+var paper;
 
 // create a new canvas element per page
 var setupLayers = function()
@@ -49,6 +60,10 @@ var setupLayers = function()
 	overlay = document.createElement("div");
 	overlay.tabIndex = 1;
 	document.body.appendChild(overlay);
+
+	// setup raphael class for SVG user interaction components
+	paper = Raphael(overlay, settings.width, settings.height);
+
 }
 
 // initialize the curser at default position, also keeps track of current page, box..etc

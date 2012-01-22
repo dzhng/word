@@ -7,6 +7,7 @@
 // add support for return character to make new lines
 //
 // NOTE:
+// remember to remove the layout SVG elements when destorying the box
 
 /************** OBJECT DECLARATION *******************/
 var TextBox = function(x, y, Width, Height, Page)
@@ -32,6 +33,13 @@ var TextBox = function(x, y, Width, Height, Page)
 	// stores the range of section chars currently within this box
 	this.index = {start:0, end:0};
 	
+	// size adjuster handles, start as null since we want to make it as needed
+	this.layoutRect = null;
+	this.layoutHandles = {top: null, bottom: null, left: null, right: null};
+
+	// hide layout by default
+	this.hideLayout();
+
 	// start with one line
 	this.reset();
 };
@@ -207,5 +215,118 @@ TextBox.prototype.drawMarkup = function()
 
 	// restore canvas back to orginal settings
 	context.restore();
+};
+
+// make layout options visible
+TextBox.prototype.showLayout = function()
+{
+	var abs = this.getAbsolute();
+	this.layoutRect = paper.rect(abs.x, abs.y, this.width, this.height).show()
+		.attr({"stroke-width":1, stroke:settings.boxOutlineColor, fill:settings.boxFill, opacity:0.1})
+		.mouseover((function() {
+			this.layoutRect.animate({opacity:0.2}, 200);
+		}).bind(this))
+		.mouseout((function() {
+			this.layoutRect.animate({opacity:0.1}, 200);
+		}).bind(this))
+		.drag((function(dx, dy, x, y) {
+			this.layoutRect.attr({x:this.ox+dx, y:this.oy+dy, width:this.width, height:this.height});
+			this.x=this.px+dx;
+			this.y=this.py+dy;
+			this.parent.updateCanvas();
+		}).bind(this),
+				(function(){
+					// store all current variables
+					this.ox = this.layoutRect.attr("x");
+					this.oy = this.layoutRect.attr("y");
+					this.px = this.x;
+					this.py = this.y;
+				}).bind(this),null);
+
+	this.layoutHandles.top = paper.rect(abs.x, abs.y-3, this.width, 6).show()
+		.attr({"stroke-width":0, fill:settings.boxHandleColor, opacity:0})
+		.mouseover((function() {
+			this.layoutHandles.top.animate({opacity:1}, 200);
+		}).bind(this))
+		.mouseout((function() {
+			this.layoutHandles.top.animate({opacity:0}, 200);
+		}).bind(this))
+		.drag((function(dx, dy) {
+			var abs = this.getAbsolute();
+			if(this.height - dy > 0) {
+				this.layoutHandles.top.attr({y:y-3, opacity:1});
+				this.height += dy;
+				this.y -= dy;
+				this.updateLayout();
+			}
+		}).bind(this),null,null);
+
+
+	this.layoutHandles.bottom = paper.rect(abs.x, abs.y+this.height-3, this.width, 6).show()
+		.attr({"stroke-width":0, fill:settings.boxHandleColor, opacity:0})
+		.mouseover((function() {
+			this.layoutHandles.top.animate({opacity:1}, 200);
+		}).bind(this))
+		.mouseout((function() {
+			this.layoutHandles.top.animate({opacity:0}, 200);
+		}).bind(this))
+		.drag((function(dx, dy, x, y) {
+			var dy = this.getAbsolute().y - y;
+			if(this.height + dy > 0) {
+				this.layoutHandles.top.attr({y:y-3, opacity:1});
+				this.height += dy;
+				this.y -= dy;
+				this.updateLayout();
+			}
+		}).bind(this),null,null);
+
+	this.layoutHandles.left = paper.rect(abs.x-3, abs.y, 6, this.height).show()
+		.attr({"stroke-width":0, fill:settings.boxHandleColor, opacity:0})
+		.mouseover((function() {
+			this.layoutHandles.top.animate({opacity:1}, 200);
+		}).bind(this))
+		.mouseout((function() {
+			this.layoutHandles.top.animate({opacity:0}, 200);
+		}).bind(this))
+		.drag((function(dx, dy, x, y) {
+			var dy = this.getAbsolute().y - y;
+			if(this.height + dy > 0) {
+				this.layoutHandles.top.attr({y:y-3, opacity:1});
+				this.height += dy;
+				this.y -= dy;
+				this.updateLayout();
+			}
+		}).bind(this),null,null);
+
+	this.layoutHandles.right = paper.rect(abs.x+this.width-3, abs.y, 6, this.height).show()
+		.attr({"stroke-width":0, fill:settings.boxHandleColor, opacity:0})
+		.mouseover((function() {
+			this.layoutHandles.top.animate({opacity:1}, 200);
+		}).bind(this))
+		.mouseout((function() {
+			this.layoutHandles.top.animate({opacity:0}, 200);
+		}).bind(this))
+		.drag((function(dx, dy, x, y) {
+			var dy = this.getAbsolute().y - y;
+			if(this.height + dy > 0) {
+				this.layoutHandles.top.attr({y:y-3, opacity:1});
+				this.height += dy;
+				this.y -= dy;
+				this.updateLayout();
+			}
+		}).bind(this),null,null);
+};
+
+// make layout options visible
+TextBox.prototype.hideLayout = function()
+{
+	if(this.layoutRect != null) {
+		// if the rect was made before, remove it
+		this.layoutRect.remove();
+		this.layoutHandles.top.remove();
+		this.layoutHandles.bottom.remove();
+		this.layoutHandles.left.remove();
+		this.layoutHandles.right.remove();
+	}
 };
 

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         
-        <title>HTML5 Canvas Editor Research</title>
+        <title>Coverink - Make beautiful documents easily!</title>
 
 		<!-- CSS Style Sheet -->
 		<link href="css/style.css" rel="stylesheet" type="text/css" />
@@ -31,6 +31,10 @@
 		<script type="text/javascript">
             function document_load() {	// Setup editor
 				setupLayers();
+
+				// set default page template as four columns
+				settings.template = FourBoxes;
+
                 var editor = new Model();
 
 				editor.setText(

@@ -252,6 +252,12 @@ Page.prototype.checkObsticle = function(x, y, width, height)
 	return {nX: mx1, nWidth: (w<0) ? 0 : w};
 };
 
+// callback function to indicate to canvas that everything needs to be reformatted
+Page.prototype.updateCanvas = function()
+{
+	this.model.draw();
+};
+
 Page.prototype.drawBackground = function()
 {
 	var context = layers.bottomContext;
@@ -307,5 +313,22 @@ Page.prototype.drawMarkup = function()
 		this.boxes[i].drawMarkup();
 	}
 	context.restore();
+};
+
+// layout menu toggle settings
+Page.prototype.showLayoutMenu = function()
+{
+	// iterate through all boxes and show
+	for(var i = 0; i < this.boxes.length; i++) {
+		this.boxes[i].showLayout();
+	}
+};
+
+Page.prototype.hideLayoutMenu = function()
+{
+	// iterate through all boxes and remove
+	for(var i = 0; i < this.boxes.length; i++) {
+		this.boxes[i].hideLayout();
+	}
 };
 
