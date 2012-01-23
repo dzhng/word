@@ -10,6 +10,8 @@
 /************** OBJECT DECLARATION *******************/
 var Model = function()
 {
+	this.mode = "edit";	// 3 modes: edit, layout, collaborate
+
 	/*** MODULES ***/
 	// variable deciarations
 	this.controller = new Controller(this);								// user input controller
@@ -207,7 +209,7 @@ Model.prototype.updateClick = function(x, y)
 		} else {
 			this.pages[this.currentPage].hideLayoutMenu();
 		}
-		console.log("menu visible status: %d", this.menuVisible);
+		//console.log("menu visible status: %d", this.menuVisible);
 	}
 };
 

@@ -229,8 +229,8 @@ TextBox.prototype.showLayout = function()
 		.mouseout((function() {
 			this.layoutRect.animate({opacity:0.1}, 200);
 		}).bind(this))
-		.drag((function(dx, dy, x, y) {
-			this.layoutRect.attr({x:this.ox+dx, y:this.oy+dy, width:this.width, height:this.height});
+		.drag((function(dx, dy) {
+			this.updateLayout(this.ox+dx, this.oy+dy, this.width, this.height);
 			this.x=this.px+dx;
 			this.y=this.py+dy;
 			this.parent.updateCanvas();
@@ -252,69 +252,88 @@ TextBox.prototype.showLayout = function()
 			this.layoutHandles.top.animate({opacity:0}, 200);
 		}).bind(this))
 		.drag((function(dx, dy) {
-			var abs = this.getAbsolute();
 			if(this.height - dy > 0) {
-				this.layoutHandles.top.attr({y:y-3, opacity:1});
-				this.height += dy;
-				this.y -= dy;
-				this.updateLayout();
+				this.y=this.py+dy;
+				this.height=this.ph-dy;
+				this.updateLayout(this.ox, this.oy+dy, this.width, this.height);
+				this.parent.updateCanvas();
 			}
-		}).bind(this),null,null);
-
+		}).bind(this),
+				(function(){
+					// store all current variables
+					this.ox = this.layoutHandles.top.attr("x");
+					this.oy = this.layoutHandles.top.attr("y");
+					this.py = this.y;
+					this.ph = this.height;
+				}).bind(this),null);
 
 	this.layoutHandles.bottom = paper.rect(abs.x, abs.y+this.height-3, this.width, 6).show()
 		.attr({"stroke-width":0, fill:settings.boxHandleColor, opacity:0})
 		.mouseover((function() {
-			this.layoutHandles.top.animate({opacity:1}, 200);
+			this.layoutHandles.bottom.animate({opacity:1}, 200);
 		}).bind(this))
 		.mouseout((function() {
-			this.layoutHandles.top.animate({opacity:0}, 200);
+			this.layoutHandles.bottom.animate({opacity:0}, 200);
 		}).bind(this))
-		.drag((function(dx, dy, x, y) {
-			var dy = this.getAbsolute().y - y;
+		.drag((function(dx, dy) {
 			if(this.height + dy > 0) {
-				this.layoutHandles.top.attr({y:y-3, opacity:1});
-				this.height += dy;
-				this.y -= dy;
-				this.updateLayout();
+				this.height=this.ph+dy;
+				this.updateLayout(this.ox, this.py, this.width, this.height);
+				this.parent.updateCanvas();
 			}
-		}).bind(this),null,null);
+		}).bind(this),
+				(function(){
+					// store all current variables
+					this.ox = this.layoutHandles.bottom.attr("x");
+					this.py = this.getAbsolute().y;
+					this.ph = this.height;
+				}).bind(this),null);
 
 	this.layoutHandles.left = paper.rect(abs.x-3, abs.y, 6, this.height).show()
 		.attr({"stroke-width":0, fill:settings.boxHandleColor, opacity:0})
 		.mouseover((function() {
-			this.layoutHandles.top.animate({opacity:1}, 200);
+			this.layoutHandles.left.animate({opacity:1}, 200);
 		}).bind(this))
 		.mouseout((function() {
-			this.layoutHandles.top.animate({opacity:0}, 200);
+			this.layoutHandles.left.animate({opacity:0}, 200);
 		}).bind(this))
-		.drag((function(dx, dy, x, y) {
-			var dy = this.getAbsolute().y - y;
-			if(this.height + dy > 0) {
-				this.layoutHandles.top.attr({y:y-3, opacity:1});
-				this.height += dy;
-				this.y -= dy;
-				this.updateLayout();
+		.drag((function(dx, dy) {
+			if(this.width - dx > 0) {
+				this.x=this.px+dx;
+				this.width=this.pw-dx;
+				this.updateLayout(this.ox+dx, this.py, this.width, this.height);
+				this.parent.updateCanvas();
 			}
-		}).bind(this),null,null);
+		}).bind(this),
+				(function(){
+					// store all current variables
+					this.ox = this.layoutHandles.left.attr("x");
+					this.px = this.x;
+					this.py = this.getAbsolute().y;
+					this.pw = this.width;
+				}).bind(this),null);
 
 	this.layoutHandles.right = paper.rect(abs.x+this.width-3, abs.y, 6, this.height).show()
 		.attr({"stroke-width":0, fill:settings.boxHandleColor, opacity:0})
 		.mouseover((function() {
-			this.layoutHandles.top.animate({opacity:1}, 200);
+			this.layoutHandles.right.animate({opacity:1}, 200);
 		}).bind(this))
 		.mouseout((function() {
-			this.layoutHandles.top.animate({opacity:0}, 200);
+			this.layoutHandles.right.animate({opacity:0}, 200);
 		}).bind(this))
-		.drag((function(dx, dy, x, y) {
-			var dy = this.getAbsolute().y - y;
-			if(this.height + dy > 0) {
-				this.layoutHandles.top.attr({y:y-3, opacity:1});
-				this.height += dy;
-				this.y -= dy;
-				this.updateLayout();
+		.drag((function(dx, dy) {
+			if(this.width + dx > 0) {
+				this.width=this.pw+dx;
+				this.updateLayout(this.px, this.py, this.width, this.height);
+				this.parent.updateCanvas();
 			}
-		}).bind(this),null,null);
+		}).bind(this),
+				(function(){
+					// store all current variables
+					this.px = this.getAbsolute().x;
+					this.py = this.getAbsolute().y;
+					this.pw = this.width;
+				}).bind(this),null);
 };
 
 // make layout options visible
@@ -328,5 +347,15 @@ TextBox.prototype.hideLayout = function()
 		this.layoutHandles.left.remove();
 		this.layoutHandles.right.remove();
 	}
+};
+
+// update layout handles
+TextBox.prototype.updateLayout = function(x, y, width, height)
+{
+	this.layoutRect.attr({x:x, y:y, width:width, height:height});
+	this.layoutHandles.top.attr({x:x, y:y-3, width:width, height:6});
+	this.layoutHandles.bottom.attr({x:x, y:y+height-3, width:width, height:6});
+	this.layoutHandles.left.attr({x:x-3, y:y, width:6, height:height});
+	this.layoutHandles.right.attr({x:x+width-3, y:y, width:6, height:height});
 };
 
