@@ -195,19 +195,25 @@ Model.prototype.updateClick = function(x, y)
 {
 	this.focus();
 	if(this.pages[this.currentPage].isHovering(x, y)) {
-		// if the page failed to update click, it didn't select any object. Default to the last char in the section
-		if(this.pages[this.currentPage].updateClick(x, y) == false) {
-			// if nothing is clicked, then cursor doesn't change
-			// TODO: This behavior might need to be adjusted
+		switch(this.mode) {
+		case "edit":
+			// if the page failed to update click, it didn't select any object. Default to the last char in the section
+			if(this.pages[this.currentPage].updateClick(x, y) == false) {
+				// if nothing is clicked, then cursor doesn't change
+				// TODO: This behavior might need to be adjusted
+			}
+			this.drawCursor();
+			break;
 		}
-		this.drawCursor();
 	} else {
 		// if nothing else is clicked, toggle menu visibility
 		this.menuVisible = !this.menuVisible;
 		if(this.menuVisible) {
 			this.pages[this.currentPage].showLayoutMenu();
+			this.mode = "layout";
 		} else {
 			this.pages[this.currentPage].hideLayoutMenu();
+			this.mode = "edit";
 		}
 		//console.log("menu visible status: %d", this.menuVisible);
 	}
@@ -217,8 +223,12 @@ Model.prototype.updateClick = function(x, y)
 Model.prototype.updateDrag = function(x, y)
 {
 	this.focus();
-	this.pages[this.currentPage].updateDrag(x, y);
-	this.drawCursor();
+	switch(this.mode) {
+	case "edit":
+		this.pages[this.currentPage].updateDrag(x, y);
+		this.drawCursor();
+		break;
+	}
 };
 
 Model.prototype.stopDrag = function(x, y)
