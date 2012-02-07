@@ -1,7 +1,7 @@
 
 var FONTS = [ "Lucida Console", "Arial", "Verdana", "Times New Roman", "Georgia", "Courier New" ];
 var STYLE = [ "Normal", "Bold", "Italic", "Bold Italic" ];
-var CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-=_+[]\\{}|;':\",./<>?";		// all printable characters
+var CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~`!@#$%^&*()-=_+[]\\{}|;':\",./<>?";		// all printable characters
 
 // Get font letter length as: LetterLen["Arial", "Normal", "a"];
 // measured at 72 px font size - scale down from there
