@@ -1,7 +1,7 @@
 
 var FONTS = [ "Lucida Console", "Arial", "Verdana", "Times New Roman", "Georgia", "Courier New" ];
 var STYLE = [ "Normal", "Bold", "Italic", "Bold Italic" ];
-var CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";		// all printable characters
+var CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()-=_+[]\\{}|;':\",./<>?";		// all printable characters
 
 // Get font letter length as: LetterLen["Arial", "Normal", "a"];
 // measured at 72 px font size - scale down from there
@@ -19,9 +19,9 @@ for (var f=0; f < FONTS.length; f++) {
 
 		for (var i=0; i < CHARS.length; i++) {
 			var fontStr = STYLE[s] + " 72px " + FONTS[f];
-			var text = CHARS[i]+CHARS[i]+CHARS[i]+CHARS[i]+CHARS[i];
+			var text = CHARS.charAt(i)+CHARS.charAt(i)+CHARS.charAt(i)+CHARS.charAt(i)+CHARS.charAt(i);
 			context.font = fontStr;
-			letterWidth[FONTS[f]][STYLE[s]][CHARS[i]] = context.measureText(text).width/5;
+			letterWidth[FONTS[f]][STYLE[s]][CHARS.charAt(i)] = context.measureText(text).width/5;
 		}
 	}
 }
