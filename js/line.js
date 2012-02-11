@@ -123,8 +123,9 @@ TextLine.prototype.drawText = function()
 				ch.style.color != cursor.style.color) {
 			context.font = ch.style.fontString;
 			context.fillStyle = ch.style.color;
-			cursor.style = ch.style;
-			//console.log ("character style changed");
+			//not sure why we need this next line
+			//cursor.style = ch.style;
+			//console.log ("character style changed"+ch.style.fontString);
 		}
 		context.fillText(ch.letter, ch.x + this.x, ch.y + this.y);
 		//console.log("drawing text %s at %d, %d", ch.letter, ch.x+this.x, ch.y+this.y);

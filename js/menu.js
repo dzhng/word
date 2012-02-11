@@ -1,7 +1,7 @@
-var Menu = function()
+var Menu = function(model)
 {
 
-	
+	this.model=model;
 	this.toggleFontSizeMenu = false //starts not visible
 	this.fontSize=12;
 
@@ -122,9 +122,13 @@ var Menu = function()
 	
 	//fontSize Choices Event handler
 	//8pt
-    this.mouseDownHandler = this.setFont8pt.bind(this);
-	var fontSize8 = document.getElementById("8pt");
-	fontSize8.addEventListener("mousedown", this.mouseDownHandler, false);
+    this.mouseDownHandler = this.setFontSize.bind(this);
+    // ids of font sizes on index.htm
+    var sizes=[8,10,12,14,18,24,36,48,72];
+    for(k=0; k<sizes.length; ++k)
+    {
+    	document.getElementById(""+sizes[k]).addEventListener("mousedown", this.mouseDownHandler, false);
+    }
 
 };
 
@@ -142,9 +146,18 @@ Menu.prototype.toggleNavMenu = function(e)
 	};
 };
 
-Menu.prototype.setFont8pt = function(e)
+Menu.prototype.setFontSize = function(e)
 {
 	this.fontSize = 8;
+	cursor.style.size = (e.target || e.srcElement).id;
+	var temp = document.getElementById("fontSizeLabel");
+
+  	while(temp.childNodes.length >= 1) 
+  	{
+    	temp.removeChild(temp.firstChild);
+  	}
+  	temp.appendChild(temp.ownerDocument.createTextNode(cursor.style.size + "pt"));
+  	model.focus();
 };
 
 Menu.prototype.textBoxDown = function(e)

@@ -22,7 +22,7 @@ Section.prototype.insertChar = function(key, index)
 {
 	var style = new Style(cursor.style.color, cursor.style.type,
 			cursor.style.style, cursor.style.size, cursor.style.script, cursor.style.align);
-
+			console.log(cursor.style.size);
 	if(index <= 0) {
 		this.chars.splice(0, 0, new Char(key, style, this));
 	} else if (index >= this.chars.length) {
