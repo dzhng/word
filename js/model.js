@@ -203,6 +203,14 @@ Model.prototype.updateClick = function(x, y)
 				// if nothing is clicked, then cursor doesn't change
 				// TODO: This behavior might need to be adjusted
 			}
+			//update controls
+			var ch = this.section.chars[cursor.index];
+			cursor.style = new Style(ch.style.color, ch.style.type,
+			ch.style.style, ch.style.size, ch.style.script, ch.style.align);
+			console.log(this.section.chars[cursor.index] + "   " + ch.style.size);
+			
+			this.menu.updateButtonsFromCursor();
+
 			this.drawCursor();
 			break;
 		}

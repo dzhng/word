@@ -2,7 +2,7 @@ var Menu = function(model)
 {
 
 	this.model=model;
-	this.toggleFontSizeMenu = false //starts not visible
+	this.toggleFontSizeMenu = false; //starts not visible
 	this.fontSize=12;
 
 	/*//Set the different variables in the Menu
@@ -150,6 +150,12 @@ Menu.prototype.setFontSize = function(e)
 {
 	this.fontSize = 8;
 	cursor.style.size = (e.target || e.srcElement).id;
+	this.updateButtonsFromCursor();
+  	model.focus();
+};
+
+Menu.prototype.updateButtonsFromCursor = function()
+{
 	var temp = document.getElementById("fontSizeLabel");
 
   	while(temp.childNodes.length >= 1) 
@@ -157,7 +163,6 @@ Menu.prototype.setFontSize = function(e)
     	temp.removeChild(temp.firstChild);
   	}
   	temp.appendChild(temp.ownerDocument.createTextNode(cursor.style.size + "pt"));
-  	model.focus();
 };
 
 Menu.prototype.textBoxDown = function(e)
