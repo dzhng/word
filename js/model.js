@@ -193,6 +193,9 @@ Model.prototype.backspace = function()
 // direction handlers
 Model.prototype.left = function()
 {
+	// stop any highlights
+	this.section.resetHighlight();
+
 	// if index is already at the beginning, don't do anything
 	if(cursor.index <= 0) {
 		return;
@@ -204,10 +207,15 @@ Model.prototype.left = function()
 
 Model.prototype.up = function()
 {
+	// stop any highlights
+	this.section.resetHighlight();
 };
 
 Model.prototype.right = function()
 {
+	// stop any highlights
+	this.section.resetHighlight();
+
 	// if index is already at the end of section, don't advance anymore
 	if(cursor.index >= this.section.chars.length) {
 		return;
@@ -219,6 +227,8 @@ Model.prototype.right = function()
 
 Model.prototype.down = function()
 {
+	// stop any highlights
+	this.section.resetHighlight();
 };
 
 /************** MOUSE HANDLERS *******************/
