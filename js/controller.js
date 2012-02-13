@@ -114,6 +114,10 @@ Controller.prototype.processKey = function(keyCode, shiftKey, ctrlKey, altKey, m
 			case 67:	// CTRL-C
 				console.debug("copy");
 				break;
+			case 84:	// CTRL-T
+				// this is a special case where we don't want to prevent default
+				// this is because CTRL-T opens up a new tab - useful
+				return false;		
 			case 86:	// CTRL-V
 				console.debug("paste");
 				break;	
@@ -184,19 +188,40 @@ Controller.prototype.processKey = function(keyCode, shiftKey, ctrlKey, altKey, m
 			case 34:	// page down
 				console.debug("page down");
 				break;
-			case 32:
+			case 37:
+				console.debug("left");
+				this.model.left();
+				break;
+			case 38:
+				console.debug("up");
+				this.model.up();
+				break;
+			case 39:
+				console.debug("right");
+				this.model.right();
+				break;
+			case 40:
+				console.debug("down");
+				this.model.down();
+				break;
+			case 32:	// space
 				this.model.insertChar(" ");
 				break;
 		}
 	}
+	
+	// for most cases, we want to prevent default
+	return true;
 };
 
 
 /************** EVENT HANDLERS *******************/
 Controller.prototype.keyDown = function(e)
 {
-    e.preventDefault();
-	this.processKey(e.keyCode, e.shiftKey, e.ctrlKey, e.altKey, e.metaKey);
+	// processKey returns true if we want to prevent default
+	if(this.processKey(e.keyCode, e.shiftKey, e.ctrlKey, e.altKey, e.metaKey)) {
+		e.preventDefault();
+	}
 };
 
 Controller.prototype.keyUp = function(e)
@@ -226,4 +251,3 @@ Controller.prototype.keyPress = function(e)
 		this.model.insertChar(text);
 	}
 };
-

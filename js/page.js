@@ -227,8 +227,9 @@ Page.prototype.checkObsticle = function(x, y, width, height)
 				(y > obj.y-b && y+height < obj.y+obj.height+b) || 
 				(y < obj.y-b && y+height > obj.y+obj.height+b)) {
 			// TODO: object is in between the lines
-			// check if object is on left or right
-			if((obj.x-b > x) && (obj.x-b < x+width)) {
+			// check if object completely engulfs line
+			if(false) {
+			} else if((obj.x-b > x) && (obj.x-b < x+width)) {			// check if object is on left or right
 				// object is on right side, modify the width so its shorter
 				x1 = x;
 				x2 = obj.x-b;

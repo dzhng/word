@@ -190,6 +190,37 @@ Model.prototype.backspace = function()
 	//TODO: Delete all highlighted characters
 };
 
+// direction handlers
+Model.prototype.left = function()
+{
+	// if index is already at the beginning, don't do anything
+	if(cursor.index <= 0) {
+		return;
+	}
+	// decrement cursor index and redraw cursor
+	cursor.index--;
+	this.drawCursor();
+};
+
+Model.prototype.up = function()
+{
+};
+
+Model.prototype.right = function()
+{
+	// if index is already at the end of section, don't advance anymore
+	if(cursor.index >= this.section.chars.length) {
+		return;
+	}
+	// increment cursor index and redraw cursor
+	cursor.index++;
+	this.drawCursor();
+};
+
+Model.prototype.down = function()
+{
+};
+
 /************** MOUSE HANDLERS *******************/
 // called by the controller to update the model and redraw
 Model.prototype.updateClick = function(x, y)
