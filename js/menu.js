@@ -116,7 +116,7 @@ var Menu = function(model)
 	selectStrikethrough.addEventListener("mousedown", this.mouseDownHandler, false);*/
 
 	//fontSize event handler
-	this.mouseDownHandler = this.toggleNavMenu.bind(this);
+	/*this.mouseDownHandler = this.toggleNavMenu.bind(this);
 	var fontSizeClick = document.getElementById("fontSize");
 	fontSizeClick.addEventListener("mousedown", this.mouseDownHandler, false);	
 	
@@ -128,7 +128,7 @@ var Menu = function(model)
     for(k=0; k<sizes.length; ++k)
     {
     	document.getElementById(""+sizes[k]).addEventListener("mousedown", this.mouseDownHandler, false);
-    }
+    }*/
 
 };
 

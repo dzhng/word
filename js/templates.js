@@ -24,13 +24,13 @@ var ThreeBoxes = function(model)
 					(PAGE_SIZE.width - 2*PPI)/2,
 					(PAGE_SIZE.height - 2*PPI)/3, this);
 
-	var box1 = new TextBox(PPI, 2*PPI+(PAGE_SIZE.height-2*PPI)/3,	// offset box by 1 inch from page by default;		
+	var box1 = new TextBox(PPI+(PAGE_SIZE.width-2*PPI)/2, PPI,	// offset box by 1 inch from page by default;		
 					(PAGE_SIZE.width - 2*PPI)/2,
-					(PAGE_SIZE.height - 2*PPI)*2/3 - 2*PPI, this);
+					(PAGE_SIZE.height - 2*PPI)/3, this);
 
-	var box2 = new TextBox(PPI+(PAGE_SIZE.width-2*PPI)/2, PPI,	// offset box by 1 inch from page by default;		
-					(PAGE_SIZE.width - 2*PPI)/2,
-					(PAGE_SIZE.height - 2*PPI)/2, this);
+	var box2 = new TextBox(PPI, 2*PPI+(PAGE_SIZE.height-2*PPI)/3,	// offset box by 1 inch from page by default;		
+					(PAGE_SIZE.width - 2*PPI),
+					(PAGE_SIZE.height - 2*PPI)*2/3 - 2*PPI, this);
 
 	box0.visible = true;
 	box1.visible = true;
